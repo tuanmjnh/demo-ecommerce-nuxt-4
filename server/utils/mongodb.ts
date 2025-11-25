@@ -15,7 +15,7 @@ export const connectToMongoDB = async (mongodbUri: string) => {
       // dbName: 'demo-ecommerce', // Please specify DB name here or in URI
 
       // --- Important configuration for Vercel/Serverless ---
-      bufferCommands: false, // If connection is lost, throw error instead of hanging request
+      bufferCommands: true, // If connection is lost, throw error instead of hanging request
       maxPoolSize: 10, // Keep the number of connections moderate
       serverSelectionTimeoutMS: 5000, // Timeout after 5s if DB connection is not possible (instead of default 30s)
       socketTimeoutMS: 45000, // Keep socket alive for 45s

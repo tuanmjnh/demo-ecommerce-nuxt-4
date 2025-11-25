@@ -14,6 +14,8 @@ export default defineNuxtConfig({
     'motion-v/nuxt'
   ],
 
+  compatibilityDate: '2025-11-25',
+
   runtimeConfig: {
     public: {
       apiBase: process.env.NUXT_PUBLIC_API_BASE || '/api',
@@ -69,8 +71,6 @@ export default defineNuxtConfig({
     // '/docs': { redirect: '/docs/getting-started', prerender: false },
     '/': { prerender: true }
   },
-
-  compatibilityDate: '2024-07-11',
 
   nitro: {
     preset: 'vercel',

@@ -13,17 +13,17 @@ const pageData = ref({
   projects: {
     title: 'Mẫu thiết kế mới nhất',
     items: [
-      { title: 'Căn hộ The Signature', description: 'Hiện đại, Tối giản', to: '/project/1', image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600' },
-      { title: 'Biệt thự Ecopark', description: 'Indochine, Sang trọng', to: '/project/2', image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600' },
-      { title: 'Nhà phố Quận 2', description: 'Scandinavian', to: '/project/3', image: 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=600' }
+      { title: 'Căn hộ The Signature', description: 'Hiện đại, Tối giản', to: '/du-an', image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600' },
+      { title: 'Biệt thự Ecopark', description: 'Indochine, Sang trọng', to: '/du-an', image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600' },
+      { title: 'Nhà phố Quận 2', description: 'Scandinavian', to: '/du-an', image: 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=600' }
     ]
   },
   blog: {
     title: 'Tin tức & Kinh nghiệm',
     items: [
-      { title: 'Bí quyết chọn sofa cho phòng khách nhỏ', description: 'Tối ưu không gian...', icon: 'i-heroicons-light-bulb' },
-      { title: 'Phong thủy phòng ngủ', description: 'Để có giấc ngủ ngon...', icon: 'i-heroicons-moon' },
-      { title: 'Bố trí ánh sáng', description: 'Hack không gian rộng hơn...', icon: 'i-heroicons-sun' }
+      { title: 'Bí quyết chọn sofa cho phòng khách nhỏ', description: 'Tối ưu không gian...', icon: 'i-lucide-lightbulb' },
+      { title: 'Phong thủy phòng ngủ', description: 'Để có giấc ngủ ngon...', icon: 'i-lucide-moon' },
+      { title: 'Bố trí ánh sáng', description: 'Hack không gian rộng hơn...', icon: 'i-lucide-sun' }
     ]
   }
 })

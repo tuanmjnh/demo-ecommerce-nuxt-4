@@ -59,7 +59,7 @@ const items = [
 
     <Motion class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 text-white" :animate="{ y: [0, 10, 0] }"
       :transition="{ duration: 2, repeat: Infinity }">
-      <UIcon name="i-heroicons-chevron-down" class="w-10 h-10 opacity-70" />
+      <UIcon name="i-lucide-chevron-down" class="w-10 h-10 opacity-70" />
     </Motion>
   </div>
 </template>

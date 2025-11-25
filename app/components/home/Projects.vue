@@ -45,7 +45,7 @@ defineProps<{
 
                 <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between">
                   <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Xem chi tiết</span>
-                  <UIcon name="i-heroicons-arrow-right"
+                  <UIcon name="i-lucide-arrow-right"
                     class="w-5 h-5 text-primary-400 group-hover:translate-x-1 transition-transform" />
                 </div>
               </div>

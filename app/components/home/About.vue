@@ -13,7 +13,7 @@ defineProps<{
     :ui="{ wrapper: 'py-16 sm:py-24', title: 'font-display text-3xl md:text-4xl font-bold' }">
     <template #links>
       <UButton color="primary" variant="solid" size="lg" class="rounded-full mt-6 font-bold px-8"
-        label="Xem hồ sơ năng lực" trailing-icon="i-heroicons-arrow-right-20-solid" />
+        label="Xem hồ sơ năng lực" trailing-icon="i-lucide-arrow-right" />
     </template>
 
     <template #default>

@@ -18,7 +18,7 @@ const { data: pageData, error } = await useAsyncData(`route-${currentSlug}`, () 
 // Map Type -> Component
 const viewComponent = computed(() => {
   const type = pageData.value?.type
-  console.log(type)
+  console.info(type)
   // switch (type) {
   //   case 'PAGE': return PageDetail
   //   case 'POST': return PostDetail
