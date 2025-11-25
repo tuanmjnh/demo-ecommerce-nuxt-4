@@ -45,7 +45,11 @@ export default defineNuxtConfig({
   devtools: {
     enabled: true
   },
-
+  // disable sourcemap for build
+  sourcemap: {
+    server: false,
+    client: false
+  },
   // colorMode: {
   //   preference: 'system', // Default value: 'light', 'dark', or 'system'
   //   fallback: 'light',   // If the system is not determined, use this
