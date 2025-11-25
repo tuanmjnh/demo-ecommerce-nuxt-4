@@ -69,7 +69,10 @@ export default defineNuxtConfig({
 
   routeRules: {
     // '/docs': { redirect: '/docs/getting-started', prerender: false },
-    '/': { prerender: true }
+    '/': { prerender: true },
+    // '/api/**': {
+    //   cors: true
+    // }
   },
 
   nitro: {
