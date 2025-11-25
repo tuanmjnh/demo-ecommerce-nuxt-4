@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import { useApi } from '~/composables/useApi'
 export const usePostStore = defineStore('postStore', () => {
   const list = ref<Models.IPost[]>([])
   const detail = ref<Models.IPost | null>(null)
@@ -8,12 +7,10 @@ export const usePostStore = defineStore('postStore', () => {
   const error = ref<string | null>(null)
   const pagination = ref({ page: 1, limit: 10, total: 0 })
 
-  const { request } = useApi()
-
   const fetchList = async (params = {}) => {
     loading.value = true
     try {
-      const rs = await request<Common.IResponseItems>('/posts', { method: 'GET', query: params })
+      const rs = await useAPI<Common.IResponseItems>('/posts', { method: 'GET', query: params })
       list.value = rs.data?.items || []
       pagination.value.total = rs.data?.total || 0
       pagination.value.page = rs.data?.page || 1
@@ -31,7 +28,7 @@ export const usePostStore = defineStore('postStore', () => {
     loading.value = true
     try {
       const normalized = slugFull.startsWith('/') ? slugFull.slice(1) : slugFull
-      const rs = await request<Common.IResponseItem>(`/posts/detail/${normalized}`, { method: 'GET' })
+      const rs = await useAPI<Common.IResponseItem>(`/posts/detail/${normalized}`, { method: 'GET' })
       detail.value = rs.data
       return rs
     } catch (e) {
@@ -45,7 +42,7 @@ export const usePostStore = defineStore('postStore', () => {
 
   const fetchRelated = async (id: string, limit = 6) => {
     try {
-      const rs = await request<Common.IResponseItems>('/posts', { method: 'GET', query: { page: 1, pageSize: limit } })
+      const rs = await useAPI<Common.IResponseItems>('/posts', { method: 'GET', query: { page: 1, pageSize: limit } })
       related.value = (rs.data?.items || []).filter((p: Models.IPost) => p._id !== id).slice(0, limit)
     } catch {
       related.value = []
