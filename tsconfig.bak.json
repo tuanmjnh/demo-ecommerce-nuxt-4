@@ -1,0 +1,22 @@
+// https://nuxt.com/docs/guide/concepts/typescript
+{
+  "files": [],
+  // "compilerOptions": {
+  //   "composite": true
+  // },
+  "references": [
+    { "path": "./.nuxt/tsconfig.app.json" },
+    { "path": "./.nuxt/tsconfig.server.json" },
+    { "path": "./.nuxt/tsconfig.shared.json" },
+    { "path": "./.nuxt/tsconfig.node.json" }
+  ]
+  // "extends": "./.nuxt/tsconfig.json"
+  // "extends": [
+  //   "./.nuxt/tsconfig.json",
+  //   "./.nuxt/tsconfig.server.json",
+  //   "./.nuxt/tsconfig.shared.json",
+  //   "./.nuxt/tsconfig.node.json"
+  // ],
+  // "include": ["app/types/**/*.d.ts", "../demo-ecommerce-api/types/**/*.d.ts"]
+  // "exclude": ["node_modules", "dist"]
+}
