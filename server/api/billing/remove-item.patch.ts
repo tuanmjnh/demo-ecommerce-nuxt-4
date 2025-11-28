@@ -10,11 +10,11 @@ export default defineEventHandler(async (event) => {
     if (!body.productId) throw new Error('Missing Product ID')
 
     const order = await BillingModel.findById(body.id)
-    if (!order) throw createError({ statusCode: 404, statusMessage: 'error.noExist', message: 'Order not found' })
-    if (order.status !== 'serving') throw createError({ statusCode: 400, statusMessage: 'error.noServing', message: 'Order is not serving' })
+    if (!order) throw createError({ statusCode: 404, statusMessage: 'noExist', message: 'Order not found' })
+    if (order.status !== 'serving') throw createError({ statusCode: 400, statusMessage: 'noServing', message: 'Order is not serving' })
 
     const target = order.items.find(i => i.productId === body.productId)
-    if (!target) throw createError({ statusCode: 404, statusMessage: 'error.noItem', message: 'Item not found' })
+    if (!target) throw createError({ statusCode: 404, statusMessage: 'noItem', message: 'Item not found' })
 
     const items = order.items.filter(i => i.productId !== body.productId)
 
@@ -28,7 +28,7 @@ export default defineEventHandler(async (event) => {
     return rs
 
   } catch (error: any) {
-    if (error.statusCode) throw error
-    throw createError({ statusCode: 400, statusMessage: 'error.actionFailed', message: error.message })
+    // if (error.statusCode) throw error
+    throw createError({ statusCode: 400, statusMessage: 'error', message: error.message })
   }
 })

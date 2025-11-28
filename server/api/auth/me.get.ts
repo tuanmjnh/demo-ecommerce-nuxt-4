@@ -6,17 +6,17 @@ export default defineEventHandler(async (event) => {
 
   try {
     const userId = auth.user?._id
-    if (!userId) throw createError({ statusCode: 401, message: 'Unauthorized' })
+    if (!userId) throw createError({ statusCode: 401, statusMessage: 'noExistAccount', message: 'Account not found' })
 
     const user = await UserService.findById(userId)
 
-    if (!user) throw createError({ statusCode: 404, message: 'User not found' })
+    if (!user) throw createError({ statusCode: 404, statusMessage: 'noExistAccount', message: 'Account not found' })
 
     rs.data = user
     return rs
 
   } catch (error: any) {
-    if (error.statusCode) throw error
-    throw createError({ statusCode: 401, statusMessage: 'error.expired', message: 'Session expired' })
+    // if (error.statusCode) throw error
+    throw createError({ statusCode: 401, statusMessage: 'expired', message: 'Session expired' })
   }
 })

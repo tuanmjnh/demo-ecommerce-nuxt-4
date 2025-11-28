@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
 
     // 1. Check exist
     const order = await BillingModel.findById(billingId)
-    if (!order) throw createError({ statusCode: 404, statusMessage: 'error.noExist', message: 'Order not found' })
+    if (!order) throw createError({ statusCode: 404, statusMessage: 'noExist', message: 'Order not found' })
 
     // 2. Update
     const updatedInfo = { at: Date.now(), by: event.context.auth?.user?.username, ip: getRequestIP(event) }
@@ -30,12 +30,12 @@ export default defineEventHandler(async (event) => {
       }
     }, true)
 
-    if (!rs.data) throw createError({ statusCode: 404, statusMessage: 'error.noExist', message: 'Failed to update' })
+    if (!rs.data) throw createError({ statusCode: 404, statusMessage: 'noExist', message: 'Failed to update' })
 
     return rs
 
   } catch (error: any) {
-    if (error.statusCode) throw error
-    throw createError({ statusCode: 400, statusMessage: 'error.updateFailed', message: error.message })
+    // if (error.statusCode) throw error
+    throw createError({ statusCode: 400, statusMessage: 'error', message: error.message })
   }
 })

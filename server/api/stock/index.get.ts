@@ -20,6 +20,6 @@ export default defineEventHandler(async (event) => {
 
     return { type: 'stock-get', status: true, message: 'success', ...rs }
   } catch (e: any) {
-    throw createError({ statusCode: 500, message: e.message })
+    throw createError({ statusCode: 500, statusMessage: 'error', message: e.message })
   }
 })

@@ -23,6 +23,6 @@ export default defineEventHandler(async (event) => {
     return { status: true, message: 'view added' }
 
   } catch (error: any) {
-    throw createError({ statusCode: 400, message: error.message })
+    throw createError({ statusCode: 400, statusMessage: 'error', message: error.message })
   }
 })

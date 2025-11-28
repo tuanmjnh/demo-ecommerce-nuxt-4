@@ -6,10 +6,10 @@ export default defineEventHandler(async (event) => {
   try {
     const args = getQuery(event)
     rs.data = await CommonService.findOne(BillingModel, args)
-    if (!rs.data) throw createError({ statusCode: 404, statusMessage: 'error.noExist', message: 'Order not found' })
+    if (!rs.data) throw createError({ statusCode: 404, statusMessage: 'noExist', message: 'Order not found' })
     return rs
   } catch (error: any) {
-    if (error.statusCode) throw error
-    throw createError({ statusCode: 500, statusMessage: 'error.serverError', message: error.message })
+    // if (error.statusCode) throw error
+    throw createError({ statusCode: 500, statusMessage: 'serverError', message: error.message })
   }
 })

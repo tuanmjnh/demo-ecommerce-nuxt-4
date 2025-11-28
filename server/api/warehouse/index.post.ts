@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
     if (body.code) {
       const exist = await CommonService.checkExist(WarehouseModel, 'code', body.code)
       if (exist) {
-        throw createError({ statusCode: 400, statusMessage: 'error.exists', message: 'Warehouse code already exists' })
+        throw createError({ statusCode: 400, statusMessage: 'exists', message: 'Warehouse code already exists' })
       }
     }
 
@@ -29,7 +29,6 @@ export default defineEventHandler(async (event) => {
     return rs
 
   } catch (error: any) {
-    if (error.statusCode) throw error
-    throw createError({ statusCode: 400, statusMessage: 'error.createFailed', message: error.message })
+    throw createError({ statusCode: 400, statusMessage: 'error', message: error.message })
   }
 })

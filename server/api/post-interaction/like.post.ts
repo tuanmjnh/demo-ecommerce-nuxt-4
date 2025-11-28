@@ -33,6 +33,6 @@ export default defineEventHandler(async (event) => {
     return { status: true, message: `like ${action}ed` }
 
   } catch (error: any) {
-    throw createError({ statusCode: 400, message: error.message })
+    throw createError({ statusCode: 400, statusMessage: 'error', message: error.message })
   }
 })

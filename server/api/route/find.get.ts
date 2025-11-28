@@ -7,10 +7,9 @@ export default defineEventHandler(async (event) => {
   try {
     const args = getQuery(event)
     rs.data = await CommonService.findOne(RouteModel, args)
-    if (!rs.data) throw createError({ statusCode: 404, statusMessage: 'error.noExist', message: 'Route not found' })
+    if (!rs.data) throw createError({ statusCode: 404, statusMessage: 'noExist', message: 'Route not found' })
     return rs
   } catch (error: any) {
-    if (error.statusCode) throw error
-    throw createError({ statusCode: 500, statusMessage: 'error.serverError', message: error.message })
+    throw createError({ statusCode: 500, statusMessage: 'error', message: error.message })
   }
 })

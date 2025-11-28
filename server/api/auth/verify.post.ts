@@ -12,6 +12,6 @@ export default defineEventHandler(async (event) => {
     return rs
 
   } catch (error: any) {
-    throw createError({ statusCode: 401, statusMessage: 'error.expired', message: 'Token expired or invalid' })
+    throw createError({ statusCode: 401, statusMessage: 'expired', message: 'Token expired or invalid' })
   }
 })

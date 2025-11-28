@@ -2,11 +2,15 @@ import { Schema, Document } from 'mongoose'
 
 export const enumLanguage = ['vi', 'en', 'zh', 'ja', 'ko']
 export const enumStatus = ['DRAFT', 'REVIEW', 'PUBLISHED', 'ARCHIVED', 'PRIVATE', 'TRASH', 'FUTURE']
+export const enumPostFormat = ['standard', 'gallery', 'video', 'audio', 'quote', 'link']
+export const enumPostType = ['post', 'page', 'product', 'project', 'service']
 export const enumDevice = ['pc', 'mobile', 'tablet', 'web']
 export const enumBillingStatus = ['empty', 'serving', 'reserved', 'paid', 'cancelled']
 export const enumConfigType = ['string', 'number', 'boolean']
 export const enumMenuType = ['PAGE', 'CATEGORY', 'POST', 'CATEGORY-POST', 'PRODUCT', 'CATEGORY-PRODUCT', 'LINK', 'MODULE']
 export const enumRouteType = ['dir', 'page']
+export const enumMenuTarget = ['_self', '_blank', '_parent', '_top']
+export const enumMenuLocation = ['HEADER_MAIN', 'HEADER_TOP', 'FOOTER_1', 'FOOTER_2', 'MOBILE']
 
 export const LastAccessSchema = new Schema<Common.ILastAccess, Document>({
   at: { type: Number, default: Date.now },
@@ -30,6 +34,12 @@ export const SeoDataSchema = new Schema<Common.ISeoData, Document>({
   tags: { type: [String], default: null },
 }, { _id: false })
 
+export const PostMediaSchema = new Schema<Common.IPostMediaData, Document>({
+  type: { type: String, default: 'image' },//'image'| 'video' | 'audio' | 'iframe'
+  url: { type: String, default: null }, // Youtube/Vimeo link or MP4/MP3 file
+  embedCode: { type: String, default: null }, // iframe embed code
+  duration: { type: Number, default: null }, // Duration (seconds)
+}, { _id: false })
 
 export const PostStatsSchema = new Schema<Common.IPostStatsData, Document>({
   views: { type: Number, default: 0 },

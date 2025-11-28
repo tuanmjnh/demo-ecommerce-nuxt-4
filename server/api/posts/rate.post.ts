@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
     // const { newsId, rating } = body
     const { newsId, rating } = await readBody(event)
     const news = await PostModel.findById(newsId)
-    if (!news) throw createError({ statusCode: 404, statusMessage: 'error.noExist', message: 'Post not found' })
+    if (!news) throw createError({ statusCode: 404, statusMessage: 'noExist', message: 'Post not found' })
 
     // Calculate new rating
     const currentCount = news.stats?.ratingCount || 0
@@ -28,7 +28,6 @@ export default defineEventHandler(async (event) => {
     return rs
 
   } catch (error: any) {
-    if (error.statusCode) throw error
-    throw createError({ statusCode: 400, statusMessage: 'error.actionFailed', message: error.message })
+    throw createError({ statusCode: 400, statusMessage: 'error', message: error.message })
   }
 })

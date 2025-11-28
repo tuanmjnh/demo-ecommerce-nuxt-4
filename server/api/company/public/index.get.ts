@@ -1,4 +1,4 @@
-import { CompanyModel } from '../../models/company.model'
+import { CompanyModel } from '../../../models/company.model'
 
 export default defineEventHandler(async (event) => {
   const rs: Common.IResponseItem = { type: 'public-get', message: 'success', status: true, data: null }
@@ -8,6 +8,6 @@ export default defineEventHandler(async (event) => {
     return rs
 
   } catch (error: any) {
-    throw createError({ statusCode: 500, statusMessage: 'error.serverError', message: error.message })
+    throw createError({ statusCode: 500, statusMessage: 'error', message: error.message })
   }
 })

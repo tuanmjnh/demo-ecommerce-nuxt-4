@@ -13,11 +13,10 @@ export default defineEventHandler(async (event) => {
     }
 
     const updated = await CommonService.update(ModelVariant, id!, payload)
-    if (!updated) throw createError({ statusCode: 404, message: 'Variant not found' })
+    if (!updated) throw createError({ statusCode: 404, statusMessage: 'noExist', message: 'Variant not found' })
 
     return { type: 'variant-update', status: true, message: 'success', data: updated }
   } catch (e: any) {
-    if (e.statusCode) throw e
-    throw createError({ statusCode: 400, message: e.message })
+    throw createError({ statusCode: 400, statusMessage: 'error', message: e.message })
   }
 })

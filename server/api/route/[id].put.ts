@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
     if (body.code) {
       const exist = await CommonService.checkExist(RouteModel, 'name', body.name!.toLowerCase(), id)
       if (exist) {
-        throw createError({ statusCode: 400, statusMessage: 'error.exists', message: 'Name already exists' })
+        throw createError({ statusCode: 400, statusMessage: 'exists', message: 'Name already exists' })
       }
     }
 
@@ -24,12 +24,11 @@ export default defineEventHandler(async (event) => {
     }
 
     rs.data = await CommonService.update(RouteModel, id, payload)
-    if (!rs.data) throw createError({ statusCode: 404, statusMessage: 'error.noExist', message: 'Route not found' })
+    if (!rs.data) throw createError({ statusCode: 404, statusMessage: 'noExist', message: 'Route not found' })
 
     return rs
 
   } catch (error: any) {
-    if (error.statusCode) throw error
-    throw createError({ statusCode: 400, statusMessage: 'error.updateFailed', message: error.message })
+    throw createError({ statusCode: 400, statusMessage: 'error', message: error.message })
   }
 })

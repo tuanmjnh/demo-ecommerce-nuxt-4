@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     const id = getRouterParam(event, 'id')
-    if (!id) throw createError({ statusCode: 400, message: 'Missing ID' })
+    if (!id) throw createError({ statusCode: 400, statusMessage: 'noExist', message: 'Missing ID' })
 
     // const data = await validateBody(event, UserValidation.update)
     const body = await readBody(event)
@@ -19,10 +19,10 @@ export default defineEventHandler(async (event) => {
     return rs
 
   } catch (error: any) {
-    if (error.statusCode) throw error
-    if (error.message === 'existUsername' || error.message === 'existEmail') {
-      throw createError({ statusCode: 400, statusMessage: `error.${error.message}`, message: 'User already exists' })
-    }
-    throw createError({ statusCode: 400, statusMessage: 'error.updateFailed', message: error.message })
+    // if (error.statusCode) throw error
+    // if (error.message === 'existUsername' || error.message === 'existEmail') {
+    //   throw createError({ statusCode: 400, statusMessage: `error.${error.message}`, message: 'User already exists' })
+    // }
+    throw createError({ statusCode: 400, statusMessage: 'error', message: error.message })
   }
 })

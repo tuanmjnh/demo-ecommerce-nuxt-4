@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
   try {
     const args = getQuery(event)
     const item = await CommonService.findOne(UserModel, args)
-    if (!item) throw createError({ statusCode: 404, statusMessage: 'error.noExist', message: 'User not found' })
+    if (!item) throw createError({ statusCode: 404, statusMessage: 'noExist', message: 'User not found' })
 
     // Ensure sensitive data is not returned (CommonService.findOne returns document, might need manual selection)
     const u: Partial<Models.User> = item.toObject ? item.toObject() : item
@@ -18,7 +18,6 @@ export default defineEventHandler(async (event) => {
     return rs
 
   } catch (error: any) {
-    if (error.statusCode) throw error
-    throw createError({ statusCode: 500, statusMessage: 'error.serverError', message: error.message })
+    throw createError({ statusCode: 500, statusMessage: 'error', message: error.message })
   }
 })

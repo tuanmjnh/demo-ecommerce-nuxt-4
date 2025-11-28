@@ -9,6 +9,6 @@ export default defineEventHandler(async (event) => {
     Object.assign(rs, r)
     return rs
   } catch (e: any) {
-    throw createError({ statusCode: 400, message: e.message })
+    throw createError({ statusCode: 400, statusMessage: 'error', message: e.message })
   }
 })

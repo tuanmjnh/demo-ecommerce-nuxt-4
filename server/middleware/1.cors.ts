@@ -13,7 +13,7 @@ export default defineEventHandler((event) => {
     // If it is an OPTIONS method (Preflight), return OK immediately -> Do not run into API logic
     if (event.method === 'OPTIONS') {
       event.node.res.statusCode = 204
-      event.node.res.statusMessage = 'No Content'
+      event.node.res.statusMessage = 'noExist'
       return 'OK'
     }
   }

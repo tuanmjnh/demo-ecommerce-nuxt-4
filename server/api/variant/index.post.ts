@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
     const created = await CommonService.create(ModelVariant, payload)
     return { type: 'variant-create', status: true, message: 'success', data: created }
   } catch (e: any) {
-    if (e.statusCode) throw e
-    throw createError({ statusCode: 400, message: e.message })
+    // if (e.statusCode) throw e
+    throw createError({ statusCode: 400, statusMessage: 'error', message: e.message })
   }
 })

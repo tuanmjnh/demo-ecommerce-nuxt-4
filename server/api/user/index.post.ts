@@ -18,11 +18,11 @@ export default defineEventHandler(async (event) => {
     return rs
 
   } catch (error: any) {
-    if (error.statusCode) throw error
-    // Handle specific service errors (defined in UserService)
-    if (error.message === 'existUsername' || error.message === 'existEmail') {
-      throw createError({ statusCode: 400, statusMessage: `error.${error.message}`, message: 'User already exists' })
-    }
-    throw createError({ statusCode: 400, statusMessage: 'error.createFailed', message: error.message })
+    // if (error.statusCode) throw error
+    // // Handle specific service errors (defined in UserService)
+    // if (error.message === 'existUsername' || error.message === 'existEmail') {
+    //   throw createError({ statusCode: 400, statusMessage: `error.${error.message}`, message: 'User already exists' })
+    // }
+    throw createError({ statusCode: 400, statusMessage: 'error', message: error.message })
   }
 })

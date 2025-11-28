@@ -22,6 +22,6 @@ export default defineEventHandler(async (event) => {
     return { status: true, message: 'comment added', data: item }
 
   } catch (error: any) {
-    throw createError({ statusCode: 400, message: error.message })
+    throw createError({ statusCode: 400, statusMessage: 'error', message: error.message })
   }
 })

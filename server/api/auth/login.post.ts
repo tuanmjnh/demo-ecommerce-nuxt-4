@@ -27,15 +27,15 @@ export default defineEventHandler(async (event) => {
     return rs
 
   } catch (error: any) {
-    console.log(error)
-    if (error.statusCode) throw error
+    // console.log(error)
+    // if (error.statusCode) throw error
     if (error.message === 'invalidCredentials') {
-      throw createError({ statusCode: 401, statusMessage: 'error.invalidCredentials', message: 'Wrong username or password' })
+      throw createError({ statusCode: 401, statusMessage: 'invalidCredentials', message: 'Wrong username or password' })
     }
     if (error.message === 'deviceLimited') {
-      throw createError({ statusCode: 403, statusMessage: 'error.deviceLimited', message: 'Device limit reached' })
+      throw createError({ statusCode: 403, statusMessage: 'deviceLimited', message: 'Device limit reached' })
     }
 
-    throw createError({ statusCode: 400, statusMessage: 'error.loginFailed', message: error.message })
+    throw createError({ statusCode: 400, statusMessage: 'loginFailed', message: error.message })
   }
 })

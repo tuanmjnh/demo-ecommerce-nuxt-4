@@ -10,6 +10,6 @@ export default defineEventHandler(async (event) => {
     Object.assign(rs, r)
     return rs
   } catch (error: any) {
-    throw createError({ statusCode: 400, statusMessage: 'error.deleteFailed', message: error.message })
+    throw createError({ statusCode: 400, statusMessage: 'error', message: error.message })
   }
 })

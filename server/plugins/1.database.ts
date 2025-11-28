@@ -3,10 +3,10 @@ export default defineNitroPlugin(async (nitroApp) => {
 
   try {
     // Get priority from environment variable, fallback to localhost
-    const uri = config.mongodbUri || 'mongodb://localhost:27017/demo-ecommerce';
-
+    const mongodbUri = config.mongodbUri || 'mongodb://localhost:27017';
+    const dbName = config.mongodbName || 'demo-ecommerce';
     // Connect DB
-    await connectToMongoDB(uri);
+    await connectToMongoDB(mongodbUri, dbName);
 
     // --- WARNING WITH SEED DATABASE ---
     // On Vercel, the function can restart (cold start) many times.

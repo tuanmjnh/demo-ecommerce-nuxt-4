@@ -14,6 +14,6 @@ export default defineEventHandler(async (event) => {
     return rs
 
   } catch (error: any) {
-    throw createError({ statusCode: 400, statusMessage: 'error.deleteFailed', message: error.message })
+    throw createError({ statusCode: 400, statusMessage: 'error', message: error.message })
   }
 })

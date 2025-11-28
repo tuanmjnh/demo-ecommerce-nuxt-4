@@ -11,17 +11,17 @@ export default defineEventHandler(async (event) => {
     // Or use validateBody if strict: await validateBody(event, z.object({ deviceId: z.string() }))
 
     const userId = auth.user?._id
-    if (!userId) throw createError({ statusCode: 401, message: 'Unauthorized' })
+    if (!userId) throw createError({ statusCode: 401, statusMessage: 'noExistAccount', message: 'Account not found' })
 
     const deviceId = body?.deviceId
 
-    if (!deviceId) throw createError({ statusCode: 400, message: 'Missing Device ID' })
+    if (!deviceId) throw createError({ statusCode: 400, statusMessage: 'noExistDeviceId', message: 'Device ID not found' })
 
     await AuthService.logout(userId, deviceId)
     return rs
 
   } catch (error: any) {
     if (error.statusCode) throw error
-    throw createError({ statusCode: 400, statusMessage: 'error.logoutFailed', message: error.message })
+    throw createError({ statusCode: 400, statusMessage: 'logoutFailed', message: error.message })
   }
 })

@@ -16,6 +16,12 @@ declare global {
       mapEmbed?: string
       social?: Common.ISocialData
       openingHours?: string
+      bankAccounts?: {
+        bankName: string,
+        number: string,
+        owner: string,
+        qrCode?: Common.IFileAttach
+      }[]
       seo?: Common.ISeoData
       created?: any
       updated?: any

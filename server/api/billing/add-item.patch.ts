@@ -10,10 +10,10 @@ export default defineEventHandler(async (event) => {
     if (!body.item) throw new Error('Missing item data')
 
     const order = await BillingModel.findById(body.id)
-    if (!order) throw createError({ statusCode: 404, statusMessage: 'error.noExist', message: 'Order not found' })
-    if (order.status !== 'serving') throw createError({ statusCode: 400, statusMessage: 'error.noServing', message: 'Order is not serving' })
+    if (!order) throw createError({ statusCode: 404, statusMessage: 'noExist', message: 'Order not found' })
+    if (order.status !== 'serving') throw createError({ statusCode: 400, statusMessage: 'noServing', message: 'Order is not serving' })
 
-    if (Number(body.item.quantity) <= 0) throw createError({ statusCode: 400, statusMessage: 'error.invalidQuantity', message: 'Invalid quantity' })
+    if (Number(body.item.quantity) <= 0) throw createError({ statusCode: 400, statusMessage: 'invalidQuantity', message: 'Invalid quantity' })
 
     // Logic: Clone items -> find -> add/push
     const items = [...order.items]
@@ -32,11 +32,11 @@ export default defineEventHandler(async (event) => {
       $push: { history: { action: 'add', item: body.item, updated: updatedInfo } }
     }, true)
 
-    if (!rs.data) throw createError({ statusCode: 404, statusMessage: 'error.noExist', message: 'Update failed' })
+    if (!rs.data) throw createError({ statusCode: 404, statusMessage: 'noExist', message: 'Update failed' })
     return rs
 
   } catch (error: any) {
-    if (error.statusCode) throw error
-    throw createError({ statusCode: 400, statusMessage: 'error.actionFailed', message: error.message })
+    // if (error.statusCode) throw error
+    throw createError({ statusCode: 400, statusMessage: 'actionFailed', message: error.message })
   }
 })

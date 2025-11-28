@@ -7,11 +7,11 @@ export default defineEventHandler(async (event) => {
     const id = getRouterParam(event, 'id')
     if (!id) throw createError({ statusCode: 400, message: 'Missing ID' })
     const item = await CommonService.findById(BillingModel, id)
-    if (!item) throw createError({ statusCode: 404, statusMessage: 'error.noExist', message: 'Order not found' })
+    if (!item) throw createError({ statusCode: 404, statusMessage: 'noExist', message: 'Order not found' })
     rs.data = item
     return rs
   } catch (error: any) {
-    if (error.statusCode) throw error
-    throw createError({ statusCode: 500, statusMessage: 'error.serverError', message: error.message })
+    // if (error.statusCode) throw error
+    throw createError({ statusCode: 500, statusMessage: 'serverError', message: error.message })
   }
 })

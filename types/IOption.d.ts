@@ -4,6 +4,7 @@ declare global {
     export interface Options {
       key: string
       code: string
+      value?: string
       title: string
       desc?: string
       meta?: Common.IMeta[]

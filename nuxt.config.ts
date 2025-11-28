@@ -5,7 +5,7 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxt/image',
     '@nuxt/ui',
-    // '@nuxt/content',
+    '@nuxt/content',
     '@vueuse/nuxt',
     'nuxt-og-image',
     '@pinia/nuxt',
@@ -21,7 +21,8 @@ export default defineNuxtConfig({
       apiBase: process.env.NUXT_PUBLIC_API_BASE || '/api',
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL || ''
     },
-    mongodbUri: process.env.MONGODB_URI || 'mongodb://localhost:27017/demo-ecommerce',
+    mongodbUri: process.env.MONGODB_URI || 'mongodb://localhost:27017',
+    mongodbName: process.env.MONGODB_NAME || 'demo-ecommerce',
     jwt_secret: process.env.JWT_SECRET || '03890a36-8888-45fe-8aa4-efb24469afb0',
     jwt_expire: '1d',
     jwt_refresh_expire: 2592000000, // 30 Day
@@ -66,6 +67,15 @@ export default defineNuxtConfig({
   },
 
   css: ['~/assets/css/main.css'],
+
+  image: {
+    domains: ['res.cloudinary.com', 'images.unsplash.com', 'plus.unsplash.com'],
+    alias: {
+      cloudinary: 'https://res.cloudinary.com',
+      unsplashPlus: 'https://plus.unsplash.com',
+      unsplashImages: 'https://images.unsplash.com'
+    }
+  },
 
   routeRules: {
     // '/docs': { redirect: '/docs/getting-started', prerender: false },

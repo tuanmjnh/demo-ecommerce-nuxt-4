@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
       // Original logic checks 'name' uniqueness when 'code' is present
       const exist = await CommonService.checkExist(RouteModel, 'name', body.name)
       if (exist) {
-        throw createError({ statusCode: 400, statusMessage: 'error.exists', message: 'Name already exists' })
+        throw createError({ statusCode: 400, statusMessage: 'exists', message: 'Name already exists' })
       }
       // body.code is already transformed to UpperCase by Zod
     }
@@ -30,7 +30,6 @@ export default defineEventHandler(async (event) => {
     return rs
 
   } catch (error: any) {
-    if (error.statusCode) throw error
-    throw createError({ statusCode: 400, statusMessage: 'error.createFailed', message: error.message })
+    throw createError({ statusCode: 400, statusMessage: 'error', message: error.message })
   }
 })

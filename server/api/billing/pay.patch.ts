@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
     if (!billingId) throw createError({ statusCode: 400, message: 'Missing Billing ID' })
 
     const order = await BillingModel.findById(billingId)
-    if (!order) throw createError({ statusCode: 404, statusMessage: 'error.noExist', message: 'Order not found' })
+    if (!order) throw createError({ statusCode: 404, statusMessage: 'noExist', message: 'Order not found' })
 
     const updatedInfo = { at: Date.now(), by: event.context.auth?.user?.username, ip: getRequestIP(event) }
 
@@ -22,11 +22,11 @@ export default defineEventHandler(async (event) => {
 
     // Optional: Set Group status to empty here if needed
 
-    if (!rs.data) throw createError({ statusCode: 404, statusMessage: 'error.noExist', message: 'Update failed' })
+    if (!rs.data) throw createError({ statusCode: 404, statusMessage: 'noExist', message: 'Update failed' })
     return rs
 
   } catch (error: any) {
-    if (error.statusCode) throw error
-    throw createError({ statusCode: 400, statusMessage: 'error.actionFailed', message: error.message })
+    // if (error.statusCode) throw error
+    throw createError({ statusCode: 400, statusMessage: 'error', message: error.message })
   }
 })

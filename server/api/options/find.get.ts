@@ -10,17 +10,12 @@ export default defineEventHandler(async (event) => {
     rs.data = await CommonService.findOne(OptionsModel, args)
 
     if (!rs.data) {
-      throw createError({ statusCode: 404, statusMessage: 'error.noExist', message: 'Record not found' })
+      throw createError({ statusCode: 404, statusMessage: 'noExist', message: 'Record not found' })
     }
 
     return rs
 
   } catch (error: any) {
-    if (error.statusCode) throw error
-    throw createError({
-      statusCode: 500,
-      statusMessage: 'error.serverError',
-      message: error.message
-    })
+    throw createError({ statusCode: 500, statusMessage: 'error', message: error.message })
   }
 })

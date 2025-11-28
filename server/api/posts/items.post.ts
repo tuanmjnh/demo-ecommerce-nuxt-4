@@ -22,19 +22,18 @@ export default defineEventHandler(async (event) => {
 
     if (body.key) filter.$and.push({ key: body.key })
     if (body.groups && body.groups.length) filter.$and.push({ groups: { $in: body.groups } })
-    const sortBy = body.sortBy || 'sort'
+    const sortBy = body.sortBy || 'createdAt'
     const sortType = body.sortType || 1
 
     rs.data = await CommonService.findAll(PostModel, filter, {
       page: body.page || 1,
       limit: body.limit || 10,
-      sort: { [sortBy]: sortType }
+      sort: body.sort ? body.sort : { [sortBy]: sortType }
     })
 
     return rs
 
   } catch (error: any) {
-    if (error.statusCode) throw error
-    throw createError({ statusCode: 500, statusMessage: 'error.serverError', message: error.message })
+    throw createError({ statusCode: 500, statusMessage: 'error', message: error.message })
   }
 })

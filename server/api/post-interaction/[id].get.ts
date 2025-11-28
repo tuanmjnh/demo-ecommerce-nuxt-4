@@ -9,13 +9,12 @@ export default defineEventHandler(async (event) => {
     if (!id) throw createError({ statusCode: 400, message: 'Missing ID' })
 
     const item = await PostInteractionModel.findOne({ _id: id, flag: 1 })
-    if (!item) throw createError({ statusCode: 404, statusMessage: 'error.noExist', message: 'Interaction not found' })
+    if (!item) throw createError({ statusCode: 404, statusMessage: 'noExist', message: 'Interaction not found' })
 
     rs.data = item
     return rs
 
   } catch (error: any) {
-    if (error.statusCode) throw error
-    throw createError({ statusCode: 500, statusMessage: 'error.serverError', message: error.message })
+    throw createError({ statusCode: 500, statusMessage: 'error', message: error.message })
   }
 })

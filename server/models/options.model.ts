@@ -4,6 +4,7 @@ export interface OptionsDocument extends Models.Options, Document { }
 const OptionsSchema = new Schema<OptionsDocument>({
   key: { type: String, required: true, lowercase: true },
   code: { type: String, required: true, index: true, uppercase: true },
+  value: { type: String, default: null },
   title: { type: String, required: true },
   desc: { type: String, default: null },
   meta: { type: [MetaSchema], default: null },

@@ -1,25 +1,73 @@
 <script setup lang="ts">
-defineProps<{ data: any }>()
+import { parseMarkdown } from '@nuxtjs/mdc/runtime'
+
+type PopulatedPost = Omit<Models.IPost, 'groups'> & { groups: Models.IGroup[] }
+const props = defineProps<{ data: PopulatedPost }>()
+
+// console.log(props.data)
+// Fetch related posts
+
+const { data: relatedPosts } = await useAsyncData(`related-posts-${props.data?._id}`, async () => {
+  if (!props.data?._id) return []
+  const filter = {
+    limit: 5,
+    sort: '-createdAt',
+    groups: props.data.groups.map((g: any) => g._id)
+  }
+  const response = await useAPI<Common.IResponseItems>('posts/public', { method: 'POST', body: filter })
+  return response.data?.items || []
+}, {
+  default: () => []
+})
+
+const { data: pinnedPosts } = await useAsyncData(`pinned-posts-${props.data?._id}`, async () => {
+  if (!props.data?._id) return []
+  const filter = {
+    limit: 5,
+    sort: '-createdAt',
+    groups: props.data.groups.length > 0 ? props.data.groups.map((g: any) => g._id) : null,
+    pins: ['POST_FEATURED']
+  }
+  const response = await useAPI<Common.IResponseItems>('posts/public', { method: 'POST', body: filter })
+  return response.data?.items || []
+}, {
+  default: () => []
+})
+
+const content = await parseMarkdown(props.data?.content || '')
+
+useSeoMeta({
+  title: () => props.data?.title,
+  description: () => props.data?.desc,
+  ogTitle: () => props.data?.title,
+  ogDescription: () => props.data?.desc,
+  ogImage: () => props.data?.image?.url,
+  twitterCard: 'summary_large_image',
+})
 </script>
 
 <template>
-  <article>
-    <div class="bg-gray-100 dark:bg-gray-800 py-12 mb-8">
-      <UContainer>
-        <UBadge :label="data?.categoryName" color="primary" variant="subtle" class="mb-4" />
-        <h1 class="text-4xl font-extrabold">{{ data?.title }}</h1>
-        <p class="text-gray-500 mt-2">Đăng ngày: {{ new Date(data?.created.at).toLocaleDateString() }}</p>
-      </UContainer>
-    </div>
+  <UContainer>
+    <UPageHeader :title="data?.title">
+      <template #headline>
+        <UBadge :label="data?.author || 'Admin'" color="primary" variant="subtle" />
+        <span class="text-muted">&middot;</span>
+        <time class="text-muted">{{ new Date(data?.publishedAt || Date.now()).toLocaleDateString() }}</time>
+      </template>
+      <ULink v-for="category in data?.groups" :key="category._id" raw :to="category.slug" active-class="font-bold"
+        inactive-class="text-muted">
+        <UBadge :label="category.title" color="secondary" variant="subtle" />
+      </ULink>
+    </UPageHeader>
 
-    <UContainer>
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div class="lg:col-span-2 prose dark:prose-invert" v-html="data?.content"></div>
-
-        <aside>
-          <h3 class="font-bold mb-4">Bài viết cùng chuyên mục</h3>
-        </aside>
+    <UPage>
+      <UPageBody>
+        <ContentRenderer v-if="content" :value="content" class="prose" />
+      </UPageBody>
+      <div :class="relatedPosts.length > 0 && pinnedPosts.length > 0 ? 'grid grid-cols-1 lg:grid-cols-2 gap-x-8' : ''">
+        <PostLinks :posts="relatedPosts" title="Bài viết liên quan" />
+        <PostLinks :posts="pinnedPosts" title="Bài viết nổi bật" />
       </div>
-    </UContainer>
-  </article>
+    </UPage>
+  </UContainer>
 </template>

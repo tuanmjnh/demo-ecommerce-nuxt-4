@@ -35,7 +35,6 @@ export default defineEventHandler(async (event) => {
     return { status: true, message: 'rating added', data: { newCount, newAverage } }
 
   } catch (error: any) {
-    if (error.statusCode) throw error
-    throw createError({ statusCode: 400, message: error.message })
+    throw createError({ statusCode: 400, statusMessage: 'error', message: error.message })
   }
 })

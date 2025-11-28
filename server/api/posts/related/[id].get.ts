@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
     const args = getQuery(event)
 
     const item = await PostModel.findById(id)
-    if (!item) throw createError({ statusCode: 404, statusMessage: 'error.noExist', message: 'Post not found' })
+    if (!item) throw createError({ statusCode: 404, statusMessage: 'noExist', message: 'Post not found' })
 
     const filter = {
       _id: { $ne: id },
@@ -28,7 +28,6 @@ export default defineEventHandler(async (event) => {
     return rs
 
   } catch (error: any) {
-    if (error.statusCode) throw error
-    throw createError({ statusCode: 500, statusMessage: 'error.serverError', message: error.message })
+    throw createError({ statusCode: 500, statusMessage: 'error', message: error.message })
   }
 })

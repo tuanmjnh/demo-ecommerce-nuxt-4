@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
     if (body.code) {
       const exist = await CommonService.checkExist(RoleModel, 'code', body.code, id)
       if (exist) {
-        throw createError({ statusCode: 400, statusMessage: 'error.exists', message: 'Code already exists' })
+        throw createError({ statusCode: 400, statusMessage: 'exists', message: 'Code already exists' })
       }
     }
 
@@ -24,12 +24,11 @@ export default defineEventHandler(async (event) => {
     }
 
     rs.data = await CommonService.update(RoleModel, id, payload)
-    if (!rs.data) throw createError({ statusCode: 404, statusMessage: 'error.noExist', message: 'Role not found' })
+    if (!rs.data) throw createError({ statusCode: 404, statusMessage: 'noExist', message: 'Role not found' })
 
     return rs
 
   } catch (error: any) {
-    if (error.statusCode) throw error
-    throw createError({ statusCode: 400, statusMessage: 'error.updateFailed', message: error.message })
+    throw createError({ statusCode: 400, statusMessage: 'error', message: error.message })
   }
 })

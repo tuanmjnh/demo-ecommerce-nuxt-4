@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
     const ids = body.items || body.ids
 
     if (!Array.isArray(ids) || ids.length === 0) {
-      throw createError({ statusCode: 400, statusMessage: 'error.missingIds', message: 'No items selected' })
+      throw createError({ statusCode: 400, statusMessage: 'missingIds', message: 'No items selected' })
     }
 
     const r = await CommonService.deleteByIds(MenuModel, ids)
@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
     return rs
 
   } catch (error: any) {
-    if (error.statusCode) throw error
-    throw createError({ statusCode: 400, statusMessage: 'error.deleteFailed', message: error.message })
+    // if (error.statusCode) throw error
+    throw createError({ statusCode: 400, statusMessage: 'error', message: error.message })
   }
 })

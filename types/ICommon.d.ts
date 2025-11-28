@@ -1,14 +1,18 @@
 export { }
 declare global {
   namespace Common {
-    export type TypeLanguage = 'vi' | 'en' | 'zh' | 'ja' | 'ko'
-    export type TypeStatus = 'DRAFT' | 'REVIEW' | 'PUBLISHED' | 'ARCHIVED' | 'PRIVATE' | 'TRASH' | 'FUTURE'
+    export type LanguageType = 'vi' | 'en' | 'zh' | 'ja' | 'ko'
+    export type StatusType = 'DRAFT' | 'REVIEW' | 'PUBLISHED' | 'ARCHIVED' | 'PRIVATE' | 'TRASH' | 'FUTURE'
+    export type PostFormatType = 'standard' | 'gallery' | 'video' | 'audio' | 'quote' | 'link';
+    export type PostType = 'post' | 'page' | 'product' | 'project' | 'service';
     export type DeviceType = 'pc' | 'mobile' | 'tablet' | 'web'
     export type BillingStatusType = 'empty' | 'serving' | 'reserved' | 'paid' | 'cancelled'
     export type ReportType = 'day' | 'week' | 'month' | 'year'
     export type ConfigType = 'string' | 'number' | 'boolean'
     export type RouteType = 'dir' | 'page'
     export type MenuType = 'PAGE' | 'CATEGORY' | 'POST' | 'CATEGORY-POST' | 'PRODUCT' | 'CATEGORY-PRODUCT' | 'LINK' | 'MODULE'
+    export type MenuTargetType = '_self' | '_blank' | '_parent' | '_top';
+    export type MenuLocationType = 'HEADER_MAIN' | 'HEADER_TOP' | 'FOOTER_1' | 'FOOTER_2' | 'MOBILE';
 
     export interface ILastAccess {
       at: number
@@ -34,6 +38,13 @@ declare global {
       title?: string
       desc?: string
       tags?: string[]
+    }
+
+    export interface IPostMediaData {
+      type: string;//'video' | 'audio' | 'iframe';
+      url: string; // Youtube/Vimeo link or MP4/MP3 file
+      embedCode?: string; // iframe embed code
+      duration?: number; // Duration (seconds)
     }
 
     export interface IPostStatsData {
@@ -79,6 +90,7 @@ declare global {
       routes: any[] | null
       user: any | null
       status: boolean
+      statusMessage?: string
       type?: string
       message?: string
     }
@@ -86,6 +98,7 @@ declare global {
     export interface IResponseItem {
       data?: any | null
       status: boolean
+      statusMessage?: string
       type?: string
       message?: string
     }
@@ -102,6 +115,7 @@ declare global {
     export interface IResponseItems {
       data?: IData | null
       status: boolean
+      statusMessage?: string
       type?: string
       message?: string
     }
@@ -110,6 +124,7 @@ declare global {
       success: any[]
       error: any[]
       status: boolean
+      statusMessage?: string
       type?: string
       message?: string
     }

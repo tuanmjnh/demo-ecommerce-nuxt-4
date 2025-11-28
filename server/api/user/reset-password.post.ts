@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
   try {
     // const id = getRouterParam(event, 'id')
     const id = await readBody(event)
-    if (!id) throw createError({ statusCode: 400, statusMessage: 'error.noExistAccount', message: 'Missing ID' })
+    if (!id) throw createError({ statusCode: 400, statusMessage: 'noExistAccount', message: 'Missing ID' })
     const config = useRuntimeConfig()
     // Get default reset password from config or body?
     // Old code used: req.configs.password_reset. Assuming passed in body or env.
@@ -24,7 +24,6 @@ export default defineEventHandler(async (event) => {
     return rs
 
   } catch (error: any) {
-    if (error.statusCode) throw error
-    throw createError({ statusCode: 400, statusMessage: 'error.actionFailed', message: error.message })
+    throw createError({ statusCode: 400, statusMessage: 'error', message: error.message })
   }
 })

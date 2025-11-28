@@ -5,7 +5,7 @@
 Make sure to install the dependencies:
 
 ```bash
-npm install
+pnpm install
 ```
 
 ## Development Server
@@ -13,7 +13,7 @@ npm install
 Start the development server on `http://localhost:3000`:
 
 ```bash
-npm dev
+pnpm dev
 ```
 
 ## Production
@@ -21,13 +21,13 @@ npm dev
 Build the application for production:
 
 ```bash
-npm build
+pnpm build
 ```
 
 Locally preview production build:
 
 ```bash
-npm preview
+pnpm preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.

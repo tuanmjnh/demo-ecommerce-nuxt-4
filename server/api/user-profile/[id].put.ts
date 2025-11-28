@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
   try {
     // 1. Get ID from current session
     const userId = auth?.user?._id
-    if (!userId) throw createError({ statusCode: 400, statusMessage: 'error.noExistAccount', message: 'Missing ID' })
+    if (!userId) throw createError({ statusCode: 400, statusMessage: 'noExistAccount', message: 'Missing ID' })
     // 2. Validate Body (Reuse UserValidation.updateProfile)
     // const body = await validateBody(event, UserValidation.updateProfile)
     const body = await readBody(event)
@@ -24,7 +24,6 @@ export default defineEventHandler(async (event) => {
     return rs
 
   } catch (error: any) {
-    if (error.statusCode) throw error
-    throw createError({ statusCode: 400, statusMessage: 'error.updateFailed', message: error.message })
+    throw createError({ statusCode: 400, statusMessage: 'error', message: error.message })
   }
 })

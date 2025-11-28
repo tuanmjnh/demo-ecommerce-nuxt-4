@@ -1,15 +1,13 @@
 <script setup lang="ts">
-const items = [
+const props = defineProps<{
+  images?: string[]
+}>()
+
+const items = computed(() => props.images && props.images.length > 0 ? props.images : [
   'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=2000&auto=format&fit=crop',
   'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2000&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000&auto=format&fit=crop',
-  // 'https://picsum.photos/640/640?random=1',
-  // 'https://picsum.photos/640/640?random=2',
-  // 'https://picsum.photos/640/640?random=3',
-  // 'https://picsum.photos/640/640?random=4',
-  // 'https://picsum.photos/640/640?random=5',
-  // 'https://picsum.photos/640/640?random=6'
-]
+  'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000&auto=format&fit=crop'
+])
 
 // Auto play logic đơn giản cho Carousel
 // const carouselRef = ref()

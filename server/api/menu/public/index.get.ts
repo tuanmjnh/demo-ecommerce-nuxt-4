@@ -1,4 +1,4 @@
-import { MenuModel } from '../../models/menu.model'
+import { MenuModel } from '../../../models/menu.model'
 
 export default defineEventHandler(async (event) => {
   const rs: Common.IResponseItems = { type: 'public-get', message: 'success', status: true, data: null }
@@ -11,6 +11,6 @@ export default defineEventHandler(async (event) => {
     return rs
 
   } catch (error: any) {
-    throw createError({ statusCode: 500, statusMessage: 'error.serverError', message: error.message })
+    throw createError({ statusCode: 500, statusMessage: 'error', message: error.message })
   }
 })

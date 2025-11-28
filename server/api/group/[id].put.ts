@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
   try {
     const id = getRouterParam(event, 'id')
     if (!id) {
-      throw createError({ statusCode: 400, statusMessage: 'error.missingId', message: 'Missing ID' })
+      throw createError({ statusCode: 400, statusMessage: 'missingId', message: 'Missing ID' })
     }
 
     // 1. Validate Body
@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
       if (exist) {
         throw createError({
           statusCode: 400,
-          statusMessage: 'error.exists',
+          statusMessage: 'exists',
           message: 'Code already exists'
         })
       }
@@ -42,17 +42,13 @@ export default defineEventHandler(async (event) => {
     rs.data = await CommonService.update(GroupModel, id, payload)
 
     if (!rs.data) {
-      throw createError({ statusCode: 404, statusMessage: 'error.noExist', message: 'Record not found' })
+      throw createError({ statusCode: 404, statusMessage: 'noExist', message: 'Record not found' })
     }
 
     return rs
 
   } catch (error: any) {
-    if (error.statusCode) throw error
-    throw createError({
-      statusCode: 400,
-      statusMessage: 'error.updateFailed',
-      message: error.message
-    })
+    // if (error.statusCode) throw error
+    throw createError({ statusCode: 400, statusMessage: 'error', message: error.message })
   }
 })

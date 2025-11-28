@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
     if (!id) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'error.missingId',
+        statusMessage: 'missingId',
         message: 'Missing ID parameter'
       })
     }
@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
     if (!item) {
       throw createError({
         statusCode: 404,
-        statusMessage: 'error.noExist',
+        statusMessage: 'noExist',
         message: 'Record not found'
       })
     }
@@ -27,11 +27,7 @@ export default defineEventHandler(async (event) => {
     return rs
 
   } catch (error: any) {
-    if (error.statusCode) throw error
-    throw createError({
-      statusCode: 500,
-      statusMessage: 'error.serverError',
-      message: error.message
-    })
+    // if (error.statusCode) throw error
+    throw createError({ statusCode: 500, statusMessage: 'error', message: error.message })
   }
 })

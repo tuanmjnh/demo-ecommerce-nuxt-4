@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     const userId = auth?.user?._id
-    if (!userId) throw createError({ statusCode: 400, statusMessage: 'error.noExistAccount', message: 'Missing ID' })
+    if (!userId) throw createError({ statusCode: 400, statusMessage: 'noExistAccount', message: 'Missing ID' })
 
     // 1. Validate Body
     // const body = await validateBody(event, UserValidation.changePassword)
@@ -17,16 +17,11 @@ export default defineEventHandler(async (event) => {
     return rs
 
   } catch (error: any) {
-    if (error.statusCode) throw error
+    // if (error.statusCode) throw error
 
-    if (error.message === 'password') {
-      throw createError({
-        statusCode: 400,
-        statusMessage: 'error.invalidPassword',
-        message: 'Incorrect old password'
-      })
-    }
+    if (error.message === 'password')
+      throw createError({ statusCode: 400, statusMessage: 'invalidPassword', message: 'Incorrect old password' })
 
-    throw createError({ statusCode: 400, statusMessage: 'error.actionFailed', message: error.message })
+    throw createError({ statusCode: 400, statusMessage: 'error', message: error.message })
   }
 })

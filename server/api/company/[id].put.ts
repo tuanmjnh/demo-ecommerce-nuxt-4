@@ -29,7 +29,7 @@ export default defineEventHandler(async (event) => {
 
   } catch (error: any) {
     // if (error.statusCode) throw error
-    console.error(error)
-    throw createError({ statusCode: 400, statusMessage: 'error.updateFailed', message: error.message })
+    // console.error(error)
+    throw createError({ statusCode: 400, statusMessage: 'error', message: error.message })
   }
 })

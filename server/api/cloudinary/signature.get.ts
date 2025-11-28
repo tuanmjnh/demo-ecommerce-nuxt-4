@@ -32,6 +32,6 @@ export default defineEventHandler(async (event) => {
     }
 
   } catch (error: any) {
-    throw createError({ statusCode: 500, statusMessage: 'error.signatureFailed', message: error.message })
+    throw createError({ statusCode: 500, statusMessage: 'error', message: error.message })
   }
 })

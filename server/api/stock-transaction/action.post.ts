@@ -22,7 +22,6 @@ export default defineEventHandler(async (event) => {
     }
 
   } catch (e: any) {
-    if (e.statusCode) throw e
-    throw createError({ statusCode: 400, message: e.message })
+    throw createError({ statusCode: 400, statusMessage: 'error', message: e.message })
   }
 })

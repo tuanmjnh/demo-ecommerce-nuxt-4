@@ -24,6 +24,7 @@
     "@unovis/vue": "^1.6.2",
     "@vueuse/nuxt": "^13.9.0",
     "bcrypt": "^6.0.0",
+    "better-sqlite3": "^12.4.6",
     "cloudinary": "^2.8.0",
     "date-fns": "^4.1.0",
     "googleapis": "^166.0.0",
@@ -36,6 +37,7 @@
     "pinia-plugin-persistedstate": "^4.7.1",
     "tm-libs": "^1.4.5",
     "tm-libs-node": "^1.0.2",
+    "vue": "^3.5.25",
     "zod": "^4.1.12"
   },
   "devDependencies": {

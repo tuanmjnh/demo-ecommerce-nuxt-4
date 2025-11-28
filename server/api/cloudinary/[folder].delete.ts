@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
     return true
 
   } catch (error: any) {
-    if (error.statusCode) throw error
-    throw createError({ statusCode: 500, statusMessage: 'error.deleteFailed', message: error.message })
+    // if (error.statusCode) throw error
+    throw createError({ statusCode: 500, statusMessage: 'error', message: error.message })
   }
 })

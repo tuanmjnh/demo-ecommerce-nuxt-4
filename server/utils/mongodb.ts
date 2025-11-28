@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 // 1. Optimized connection function for Serverless
-export const connectToMongoDB = async (mongodbUri: string) => {
+export const connectToMongoDB = async (mongodbUri: string, dbName: string) => {
   // Check state: 1 = connected, 2 = connecting. If ok, return immediately.
   if (mongoose.connection.readyState === 1 || mongoose.connection.readyState === 2) {
     console.log('Using existing database connection');
@@ -12,14 +12,13 @@ export const connectToMongoDB = async (mongodbUri: string) => {
     mongoose.set('strictQuery', true);
 
     await mongoose.connect(mongodbUri, {
-      // dbName: 'demo-ecommerce', // Please specify DB name here or in URI
-
+      dbName: dbName, // Please specify DB name here or in URI
       // --- Important configuration for Vercel/Serverless ---
       bufferCommands: true, // If connection is lost, throw error instead of hanging request
       maxPoolSize: 10, // Keep the number of connections moderate
       serverSelectionTimeoutMS: 5000, // Timeout after 5s if DB connection is not possible (instead of default 30s)
       socketTimeoutMS: 45000, // Keep socket alive for 45s
-      // family: 4 // Force IPv4 (avoid errors on some localhost/cloud environments)
+      // family: process.env.NODE_ENV === 'development' ? 4 : undefined // Force IPv4 (avoid errors on some localhost/cloud environments)
     });
 
     console.log('New database connection established');

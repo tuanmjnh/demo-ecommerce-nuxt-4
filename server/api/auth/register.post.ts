@@ -13,11 +13,11 @@ export default defineEventHandler(async (event) => {
     return rs
 
   } catch (error: any) {
-    if (error.statusCode) throw error
+    // if (error.statusCode) throw error
     // Map existing service errors
-    if (error.message === 'existUsername' || error.message === 'existEmail') {
-      throw createError({ statusCode: 400, statusMessage: `error.${error.message}`, message: 'User already exists' })
-    }
-    throw createError({ statusCode: 400, statusMessage: 'error.registerFailed', message: error.message })
+    // if (error.message === 'existUsername' || error.message === 'existEmail') {
+    //   throw createError({ statusCode: 400, statusMessage: `error.${error.message}`, message: 'User already exists' })
+    // }
+    throw createError({ statusCode: 400, statusMessage: 'existUsername', message: 'User already exists' })
   }
 })

@@ -22,12 +22,12 @@ export default defineEventHandler(async (event) => {
     return rs
 
   } catch (error: any) {
-    if (error.statusCode) throw error
+    // if (error.statusCode) throw error
 
-    if (['invalidRefreshToken', 'refreshExpired', 'noExistAccount'].includes(error.message)) {
-      throw createError({ statusCode: 401, statusMessage: `error.${error.message}`, message: 'Session expired' })
-    }
+    // if (['invalidRefreshToken', 'refreshExpired', 'noExistAccount'].includes(error.message)) {
+    //   throw createError({ statusCode: 401, statusMessage: `error.${error.message}`, message: 'Session expired' })
+    // }
 
-    throw createError({ statusCode: 400, statusMessage: 'error.refreshFailed', message: error.message })
+    throw createError({ statusCode: 400, statusMessage: 'invalidRefreshToken', message: error.message })
   }
 })

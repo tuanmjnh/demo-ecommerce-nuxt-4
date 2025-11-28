@@ -27,7 +27,7 @@ export default defineEventHandler(async (event) => {
       filter.$and.push({ groups: { $in: groups } })
     }
 
-    const sortBy = String(args.sortBy || 'sort')
+    const sortBy = String(args.sortBy || 'createdAt')
     const sortType = parseInt(String(args.sortType)) || 1
 
     rs.data = await CommonService.findAll(PostModel, filter, {
@@ -39,7 +39,7 @@ export default defineEventHandler(async (event) => {
     return rs
 
   } catch (error: any) {
-    console.error(error)
-    throw createError({ statusCode: 500, statusMessage: 'error.serverError', message: error.message })
+    // console.error(error)
+    throw createError({ statusCode: 500, statusMessage: 'error', message: error.message })
   }
 })

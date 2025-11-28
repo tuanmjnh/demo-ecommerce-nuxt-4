@@ -15,13 +15,12 @@ export default defineEventHandler(async (event) => {
       { new: true }
     )
 
-    if (!data) throw createError({ statusCode: 404, statusMessage: 'error.noExist', message: 'Interaction not found' })
+    if (!data) throw createError({ statusCode: 404, statusMessage: 'noExist', message: 'Interaction not found' })
 
     rs.data = data
     return rs
 
   } catch (error: any) {
-    if (error.statusCode) throw error
-    throw createError({ statusCode: 400, statusMessage: 'error.deleteFailed', message: error.message })
+    throw createError({ statusCode: 400, statusMessage: 'error', message: error.message })
   }
 })

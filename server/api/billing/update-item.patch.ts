@@ -10,14 +10,14 @@ export default defineEventHandler(async (event) => {
     if (!body.newItem || !body.oldItem) throw new Error('Missing item data')
 
     const order = await BillingModel.findById(body.id)
-    if (!order) throw createError({ statusCode: 404, statusMessage: 'error.noExist', message: 'Order not found' })
-    if (order.status !== 'serving') throw createError({ statusCode: 400, statusMessage: 'error.noServing', message: 'Order is not serving' })
-    if (Number(body.newItem.quantity) <= 0) throw createError({ statusCode: 400, statusMessage: 'error.invalidQuantity', message: 'Invalid quantity' })
+    if (!order) throw createError({ statusCode: 404, statusMessage: 'noExist', message: 'Order not found' })
+    if (order.status !== 'serving') throw createError({ statusCode: 400, statusMessage: 'noServing', message: 'Order is not serving' })
+    if (Number(body.newItem.quantity) <= 0) throw createError({ statusCode: 400, statusMessage: 'invalidQuantity', message: 'Invalid quantity' })
 
     const items = [...order.items]
     const targetIndex = items.findIndex(i => i.productId === body.oldItem!.productId)
 
-    if (targetIndex < 0) throw createError({ statusCode: 404, statusMessage: 'error.noItem', message: 'Item not found in order' })
+    if (targetIndex < 0) throw createError({ statusCode: 404, statusMessage: 'noItem', message: 'Item not found in order' })
 
     // Replace item
     if (items && items.length && items[targetIndex] && body.newItem && body.newItem.productId && body.newItem.productId !== body.oldItem.productId) {
@@ -37,7 +37,7 @@ export default defineEventHandler(async (event) => {
     return rs
 
   } catch (error: any) {
-    if (error.statusCode) throw error
-    throw createError({ statusCode: 400, statusMessage: 'error.actionFailed', message: error.message })
+    // if (error.statusCode) throw error
+    throw createError({ statusCode: 400, statusMessage: 'error', message: error.message })
   }
 })

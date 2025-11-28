@@ -1,6 +1,19 @@
 <script setup lang="ts">
-// Dữ liệu trang (Có thể lấy từ API/Content sau này)
-const pageData = ref({
+// Fetch home page data from API
+const { data: homeData, error } = await useAsyncData('home-page', async () => {
+  const response = await useAPI<Common.IResponseItems>('home')
+  return response.data
+})
+
+// Fallback data in case API fails
+const pageData = computed(() => homeData.value || {
+  hero: {
+    images: [
+      'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=2000&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2000&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000&auto=format&fit=crop'
+    ]
+  },
   about: {
     title: 'Về LuxeDesign',
     description: 'Chúng tôi tin rằng mỗi công trình không chỉ là một tài sản, mà còn là nơi vun đắp hạnh phúc và phản ánh dấu ấn cá nhân của gia chủ.',
@@ -12,35 +25,28 @@ const pageData = ref({
   },
   projects: {
     title: 'Mẫu thiết kế mới nhất',
-    items: [
-      { title: 'Căn hộ The Signature', description: 'Hiện đại, Tối giản', to: '/du-an', image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600' },
-      { title: 'Biệt thự Ecopark', description: 'Indochine, Sang trọng', to: '/du-an', image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600' },
-      { title: 'Nhà phố Quận 2', description: 'Scandinavian', to: '/du-an', image: 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=600' }
-    ]
+    items: []
   },
   blog: {
     title: 'Tin tức & Kinh nghiệm',
-    items: [
-      { title: 'Bí quyết chọn sofa cho phòng khách nhỏ', description: 'Tối ưu không gian...', icon: 'i-lucide-lightbulb' },
-      { title: 'Phong thủy phòng ngủ', description: 'Để có giấc ngủ ngon...', icon: 'i-lucide-moon' },
-      { title: 'Bố trí ánh sáng', description: 'Hack không gian rộng hơn...', icon: 'i-lucide-sun' }
-    ]
+    items: []
   }
 })
 
 useSeoMeta({
   title: 'LuxeDesign - Kiến tạo không gian sống đẳng cấp',
-  description: pageData.value.about.description
+  description: pageData.value.about?.description || 'Kiến tạo không gian sống đẳng cấp'
 })
 </script>
 
+
 <template>
   <div class="font-body text-gray-900 dark:text-gray-100">
-    <HomeHero />
+    <HomeHero :images="pageData.hero?.images" />
 
     <HomeAbout :data="pageData.about" />
 
-    <HomeProjects :title="pageData.projects.title" :items="pageData.projects.items" />
+    <HomeProjects :title="pageData.projects?.title" :items="pageData.projects?.items" />
 
     <HomeBlog :data="pageData.blog" />
 

@@ -24,10 +24,6 @@ export default defineEventHandler(async (event) => {
     return rs
 
   } catch (error: any) {
-    throw createError({
-      statusCode: 500,
-      statusMessage: 'error.serverError',
-      message: error.message
-    })
+    throw createError({ statusCode: 500, statusMessage: 'error', message: error.message })
   }
 })

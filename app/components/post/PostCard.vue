@@ -1,12 +1,13 @@
 <script setup lang="ts">
-defineProps<{ post: any }>()
+const props = defineProps<{ post: any }>()
+console.log(props.post)
 </script>
 
 <template>
   <article class="post-card">
     <h3>{{ post.title }}</h3>
     <p>{{ post.desc }}</p>
-    <NuxtLink :to="post.slugFull">{{ post.slugFull }}</NuxtLink>
+    <NuxtLink :to="post.slug">{{ post.slug }}</NuxtLink>
   </article>
 </template>
 

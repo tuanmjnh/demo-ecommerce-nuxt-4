@@ -12,12 +12,11 @@ export default defineEventHandler(async (event) => {
 
     rs.data = await CommonService.update(PostInteractionModel, id, data)
 
-    if (!rs.data) throw createError({ statusCode: 404, statusMessage: 'error.noExist', message: 'Interaction not found' })
+    if (!rs.data) throw createError({ statusCode: 404, statusMessage: 'noExist', message: 'Interaction not found' })
 
     return rs
 
   } catch (error: any) {
-    if (error.statusCode) throw error
-    throw createError({ statusCode: 400, statusMessage: 'error.updateFailed', message: error.message })
+    throw createError({ statusCode: 400, statusMessage: 'error', message: error.message })
   }
 })
