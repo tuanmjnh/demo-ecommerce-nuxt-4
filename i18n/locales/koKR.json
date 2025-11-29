@@ -130,6 +130,7 @@
     "page": "페이지",
     "category": "카테고리",
     "post": "게시물",
+    "news": "소식",
     "product": "제품",
     "item": "품목",
     "link": "링크",
@@ -556,6 +557,12 @@
         "AUTHOR_ANONYMOUS": "익명",
         "AUTHOR_ADMIN": "관리자",
         "AUTHOR_SYSTEM": "시스템"
+      },
+      "meta": {
+        "title": "메타 데이터",
+        "seoTitle": "SEO 제목",
+        "seoDesc": "SEO 설명",
+        "seoTags": "SEO 태그"
       },
       "unit": {
         "title": "단가"

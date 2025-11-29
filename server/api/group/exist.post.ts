@@ -8,10 +8,11 @@ export default defineEventHandler(async (event) => {
     // const query = getQuery(event)
     // const data = typeof query.args === 'string' ? JSON.parse(query.args) : query.args
     const body = await readBody(event)
-    rs.status = await CommonService.exists(GroupModel, body.filter, String(body.id))
-
+    rs.status = await CommonService.exists(GroupModel, body.filter, body.id ? String(body.id) : undefined)
+    // console.log(rs)
     return rs
   } catch (error: any) {
+    console.log(error)
     throw createError({ statusCode: 500, statusMessage: 'error', message: error.message })
   }
 })

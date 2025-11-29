@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
   const slug = String(query.url || '').replace(/^\//, '') // Remove the / at the beginning
 
   // 1. CALL THE CONNECT FUNCTION HERE (It has a check if connected mechanism so there is no fear of redundancy)
-  await connectToMongoDB(config.mongodbUri, config.mongodbName)
+  // await connectToMongoDB(config.mongodbUri, config.mongodbName)
 
   // 1. Look in the MENU table to see what this URL corresponds to
   // Since your Menu contains a refId and type, this is the best place to look

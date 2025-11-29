@@ -4,6 +4,8 @@ declare global {
     export interface Company {
       name: string
       shortName?: string
+      slogan?: string
+      desc?: string
       address?: string
       phone?: string
       fax?: string

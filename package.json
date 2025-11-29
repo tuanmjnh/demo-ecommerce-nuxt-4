@@ -29,6 +29,7 @@
     "date-fns": "^4.1.0",
     "googleapis": "^166.0.0",
     "jsonwebtoken": "^9.0.2",
+    "medium-zoom": "^1.1.0",
     "mongoose": "^8.20.1",
     "motion-v": "^1.7.4",
     "nuxt": "^4.2.1",

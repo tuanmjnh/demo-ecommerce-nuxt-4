@@ -4,6 +4,8 @@ import { parseMarkdown } from '@nuxtjs/mdc/runtime'
 const props = defineProps<{ data?: any }>()
 
 const content = await parseMarkdown(props.data?.content || '')
+// const images = await parseMarkdown(props.data?.images.map((img: any) =>
+//   `<img :src="${img.url}" :alt="${img.display_name}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />`).join('\n') || '')
 // Lấy thông tin dự án dựa trên ID từ URL
 const project = computed(() => {
   if (props.data) {
@@ -53,8 +55,8 @@ const project = computed(() => {
 
       <Motion class="w-full h-full" :initial="{ scale: 1.1 }" :animate="{ scale: 1 }" :transition="{ duration: 1.5 }">
         <!-- <img :src="project.image?.url" class="w-full h-full object-cover" /> -->
-        <NuxtImg v-if="project.image?.url" :src="project.image.url" :alt="project.title" width="800" height="600"
-          fit="cover" format="webp" loading="lazy" placeholder
+        <NuxtImg v-if="project.image?.url" :src="project.image.url" :alt="project.title" width="1264" height="643"
+          fit="cover" format="webp" loading="lazy" :placeholder="10"
           class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
       </Motion>
 
@@ -156,13 +158,12 @@ const project = computed(() => {
         <div v-for="(img, idx) in project.images" :key="idx" class="overflow-hidden rounded-xl">
           <Motion class="h-full" :initial="{ opacity: 0, y: 20 }" :while-in-view="{ opacity: 1, y: 0 }"
             :transition="{ delay: idx * 0.1 }" :in-view-options="{ once: true }">
-            <!-- <img :src="img.url" :alt="img.display_name"
-              class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" /> -->
             <NuxtImg :src="img.url" :alt="img.display_name" width="616" height="347" fit="cover" format="webp"
-              loading="lazy" placeholder
+              loading="lazy" :placeholder="10" zoom
               class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
           </Motion>
         </div>
+        <!-- <ContentRenderer :value="images" /> -->
       </div>
     </div>
 

@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
     // const query = getQuery(event)
     // const filter = typeof query.filter === 'string' ? JSON.parse(query.filter) : query.filter
     const body = await readBody(event)
-    rs.status = await CommonService.exists(ConnectModel, body.filter, body.id)
+    rs.status = await CommonService.exists(ConnectModel, body.filter, body.id ? String(body.id) : undefined)
     return rs
 
   } catch (error: any) {

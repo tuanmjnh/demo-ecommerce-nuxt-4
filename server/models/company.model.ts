@@ -4,6 +4,8 @@ export interface CompanyDocument extends Models.Company, Document { }
 const CompanySchema = new Schema<CompanyDocument>({
   name: { type: String, required: true },
   shortName: { type: String, default: null },
+  slogan: { type: String, default: null },
+  desc: { type: String, default: null },
   address: { type: String, default: null },
   phone: { type: String, default: null },
   fax: { type: String, default: null },

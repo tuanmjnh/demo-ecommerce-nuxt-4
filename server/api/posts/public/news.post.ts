@@ -15,10 +15,11 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    if (body.key) {
-      const key = Array.isArray(body.key) ? body.key : [body.key]
-      filter.$and.push({ key: { $in: key } })
-    }
+    // if (body.key) {
+    //   const key = Array.isArray(body.key) ? body.key : [body.key]
+    //   filter.$and.push({ key: { $in: key } })
+    // }
+    filter.$and.push({ key: 'news' })
     // Handle groups array query
     if (body.groups) {
       const groups = Array.isArray(body.groups) ? body.groups : [body.groups]

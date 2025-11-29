@@ -130,6 +130,7 @@
     "page": "Page",
     "category": "Category",
     "post": "Post",
+    "news": "News",
     "product": "Product",
     "item": "Item",
     "link": "Link",
@@ -554,6 +555,12 @@
         "AUTHOR_ANONYMOUS": "Anonymous",
         "AUTHOR_ADMIN": "Admin",
         "AUTHOR_SYSTEM": "System"
+      },
+      "meta": {
+        "title": "Meta data",
+        "seoTitle": "SEO title",
+        "seoDesc": "SEO description",
+        "seoTags": "SEO Tags"
       },
       "unit": {
         "title": "Unit"

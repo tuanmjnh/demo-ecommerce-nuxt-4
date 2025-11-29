@@ -3,11 +3,12 @@ import { GroupModel } from '../../../models/group.model'
 export default defineEventHandler(async (event) => {
   const rs: Common.IResponseItems = { type: 'public-get', message: 'success', status: true, data: null }
   try {
-    const args = getQuery(event)
-    const filter: any = { $and: [{ flag: args.flag !== undefined ? parseInt(String(args.flag)) : 1 }] }
+    const body = await readBody(event)
+
+    const filter: any = { $and: [{ flag: body.flag !== undefined ? parseInt(String(body.flag)) : 1 }] }
     // Filter by text
-    if (args.text) {
-      const text = String(args.text)
+    if (body.text) {
+      const text = String(body.text)
       filter.$and.push({
         $or: [
           { key: new RegExp(text, 'i') },
@@ -17,11 +18,19 @@ export default defineEventHandler(async (event) => {
       })
     }
     // Filter by key
-    if (args.key) {
-      filter.$and.push({ key: String(args.key) })
-    }
-    rs.data = await CommonService.findAll(GroupModel, filter, { sort: { sort: 1 } })
-    rs.data = rs.data.items
+    if (body.key) filter.$and.push({ key: String(body.key) })
+    if (body.parent) filter.$and.push({ parent: { $in: body.parent } })
+
+    const sortBy = String(body.sortBy || 'sort')
+    const sortType = parseInt(String(body.sortType)) || 1
+
+    rs.data = await CommonService.findAll(GroupModel, filter, {
+      page: Number(body.page) || 1,
+      limit: Number(body.limit) || 10,
+      sort: body.sort ? body.sort : { [sortBy]: sortType }
+    })
+
+    // rs.data = await CommonService.findAll(GroupModel, filter, { sort: { sort: 1 } })
     return rs
 
   } catch (error: any) {

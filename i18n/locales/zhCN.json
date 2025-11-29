@@ -130,6 +130,7 @@
     "page": "页面",
     "category": "分类",
     "post": "文章",
+    "news": "消息",
     "product": "产品",
     "item": "商品",
     "link": "链接",
@@ -556,6 +557,12 @@
         "AUTHOR_ANONYMOUS": "匿名",
         "AUTHOR_ADMIN": "管理员",
         "AUTHOR_SYSTEM": "系统"
+      },
+      "meta": {
+        "title": "元数据",
+        "seoTitle": "SEO标题",
+        "seoDesc": "SEO描述",
+        "seoTags": "SEO标签"
       },
       "unit": {
         "title": "单位"

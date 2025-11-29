@@ -2,21 +2,53 @@
 const props = defineProps<{ data?: Models.IGroup }>()
 
 // Fetch all groups to map IDs to Names
-const { data: groupsData } = await useAsyncData('groups-list', () => useAPI<Common.IResponseItems>('groups'))
-const groupsMap = computed(() => {
-  const map: Record<string, string> = {}
-  groupsData.value?.data?.items?.forEach((g: any) => {
-    if (g._id) map[g._id] = g.title
+const { data: groupsData } = await useAsyncData('groups-list', async () => {
+  const filter: any = {
+    limit: 9,
+    sort: 'sort',
+    key: props.data?.key,
+    parent: props.data?._id ? [props.data._id] : []
+  }
+  const response = await useAPI<Common.IResponseItems>('group/public', {
+    method: 'POST',
+    body: filter
   })
-  return map
+  return response.data
 })
 
+
+const router = useRouter()
+const route = useRoute()
+const activeCategory = ref('all')
+const page = ref(Number(route.query.page) || 1)
+const limit = ref(9)
+
+// Sync page with route query
+watch(() => route.query.page, (newPage) => {
+  page.value = Number(newPage) || 1
+})
+
+// ... (existing code) ...
+
+
+
 // Fetch projects from API
-const { data: projectsData } = await useAsyncData(`projects-list-${props.data?._id || 'all'}`, async () => {
+const { data: projectsData, refresh } = await useAsyncData(`projects-list-${props.data?._id || 'all'}`, async () => {
+  const groupIds = []
+  if (activeCategory.value === 'all') {
+    if (props.data?._id) groupIds.push(props.data._id)
+    if (groupsData.value?.items) {
+      groupIds.push(...groupsData.value.items.map((g: any) => g._id))
+    }
+  } else {
+    groupIds.push(activeCategory.value)
+  }
+
   const filter: any = {
-    limit: 50,
+    limit: limit.value,
+    page: page.value,
     sort: '-createdAt',
-    groups: props.data?._id ? [props.data._id] : undefined
+    groups: groupIds.length ? groupIds : undefined
   }
 
   const response = await useAPI<Common.IResponseItems>('posts/public', {
@@ -24,6 +56,8 @@ const { data: projectsData } = await useAsyncData(`projects-list-${props.data?._
     body: filter
   })
   return response.data
+}, {
+  watch: [page, activeCategory]
 })
 
 const projects = computed(() => {
@@ -31,14 +65,6 @@ const projects = computed(() => {
   return projectsData.value.items.map((post: Models.IPost) => {
     // Resolve category name
     let categoryName = 'Khác'
-    if (post.groups && post.groups.length > 0) {
-      const firstGroup = post.groups[0]
-      if (typeof firstGroup === 'string') {
-        categoryName = groupsMap.value[firstGroup] || 'Khác'
-      } else if (typeof firstGroup === 'object' && 'title' in firstGroup) {
-        categoryName = (firstGroup as any).title
-      }
-    }
 
     return {
       id: post._id || '',
@@ -52,21 +78,34 @@ const projects = computed(() => {
   })
 })
 
+const total = computed(() => projectsData.value?.total || 0)
+
 // Extract unique categories from projects
 const categories = computed(() => {
-  const cats = new Set<string>(['Tất cả'])
-  projects.value.forEach((p: any) => {
-    if (p.category) cats.add(p.category)
-  })
-  return Array.from(cats)
+  const cats = [{ title: 'Tất cả', _id: 'all' }]
+  if (groupsData.value?.items) {
+    cats.push(...groupsData.value.items)
+  }
+  return cats
 })
 
-const activeCategory = ref('Tất cả')
+function to(page: number) {
+  return {
+    query: { page },
+    // hash: '#with-links'
+  }
+}
 
 // Logic lọc dự án
 const filteredProjects = computed(() => {
-  if (activeCategory.value === 'Tất cả') return projects.value
-  return projects.value.filter((p: any) => p.category === activeCategory.value)
+  return projects.value
+})
+
+// Reset page when category changes
+watch(activeCategory, () => {
+  if (page.value !== 1) {
+    router.push({ query: { ...route.query, page: 1 } })
+  }
 })
 </script>
 
@@ -83,12 +122,12 @@ const filteredProjects = computed(() => {
       </Motion>
 
       <div class="flex flex-wrap gap-3 mt-8">
-        <button v-for="cat in categories" :key="cat" @click="activeCategory = cat"
+        <button v-for="cat in categories" :key="cat._id" @click="activeCategory = cat._id"
           class="px-5 py-2 rounded-full text-sm font-bold transition-all duration-300 border"
-          :class="activeCategory === cat
+          :class="activeCategory === cat._id
             ? 'bg-primary-500 border-primary-500 text-white shadow-lg'
             : 'bg-gray-100 dark:bg-gray-800 border-transparent text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'">
-          {{ cat }}
+          {{ cat.title }}
         </button>
       </div>
     </div>
@@ -102,6 +141,11 @@ const filteredProjects = computed(() => {
           :animate="{ opacity: 1, y: 0 }" :transition="{ delay: index * 0.1, duration: 0.5 }">
           <ProjectCard :project="project" />
         </Motion>
+      </div>
+
+      <!-- Pagination -->
+      <div v-if="total > limit" class="mt-12 flex justify-center">
+        <UPagination v-model:page="page" :total="total" :page-count="limit" :to="to" />
       </div>
     </div>
   </div>

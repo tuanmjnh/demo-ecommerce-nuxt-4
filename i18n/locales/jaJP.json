@@ -130,6 +130,7 @@
     "page": "ページ",
     "category": "カテゴリー",
     "post": "投稿",
+    "news": "ニュース",
     "product": "商品",
     "item": "商品",
     "link": "リンク",
@@ -556,6 +557,12 @@
         "AUTHOR_ANONYMOUS": "匿名",
         "AUTHOR_ADMIN": "管理者",
         "AUTHOR_SYSTEM": "システム"
+      },
+      "meta": {
+        "title": "メタデータ",
+        "seoTitle": "SEOタイトル",
+        "seoDesc": "SEO説明",
+        "seoTags": "SEOタグ"
       },
       "unit": {
         "title": "単位"

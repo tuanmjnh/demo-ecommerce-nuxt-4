@@ -18,13 +18,15 @@ export default defineEventHandler(async (event) => {
     }
 
     if (args.key) filter.$and.push({ key: String(args.key) })
-
     // Handle groups array query
     if (args.groups) {
       const groups = Array.isArray(args.groups) ? args.groups : [args.groups]
       filter.$and.push({ groups: { $in: groups } })
     }
-
+    if (args.pins) {
+      const pins = Array.isArray(args.pins) ? args.pins : [args.pins]
+      filter.$and.push({ pins: { $in: pins } })
+    }
     const sortBy = String(args.sortBy || 'createdAt')
     const sortType = parseInt(String(args.sortType)) || -1
 

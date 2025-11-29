@@ -130,6 +130,7 @@
     "page": "Trang",
     "category": "Danh mục",
     "post": "Bài đăng",
+    "news": "Tin tức",
     "product": "Sản phẩm",
     "item": "Mặt hàng",
     "link": "Liên kết",
@@ -554,6 +555,12 @@
         "AUTHOR_ANONYMOUS": "Ẩn danh",
         "AUTHOR_ADMIN": "Admin",
         "AUTHOR_SYSTEM": "Hệ thống"
+      },
+      "meta": {
+        "title": "Siêu dữ liệu",
+        "seoTitle": "Tiêu đề SEO",
+        "seoDesc": "Mô tả SEO",
+        "seoTags": "Thẻ SEO"
       },
       "unit": {
         "title": "Đơn vị"

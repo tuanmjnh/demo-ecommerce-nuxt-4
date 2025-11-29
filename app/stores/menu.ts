@@ -123,11 +123,17 @@ export const useMenuStore = defineStore('menuStore', () => {
     return mapRecursive(treeItems.value)
   })
 
+  const uiMenuFooter = computed(() => {
+    const items = flatItems.value.filter(item => item.locations.includes('FOOTER_1'))
+    return items
+  })
+
   return {
     error,
     flatItems,
     treeItems,   // Use this if you need raw tree data (e.g., for an Edit Form)
     uiMenuItems, // Use this for rendering the <UNavigationMenu />
+    uiMenuFooter,
     fetchMenu
   }
 })//, {

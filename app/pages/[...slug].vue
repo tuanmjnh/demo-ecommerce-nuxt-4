@@ -20,7 +20,6 @@ const { data: pageData, error } = await useAsyncData(`route-${currentSlug}`, asy
 // Map Type -> Component
 const viewComponent = computed(() => {
   const type = pageData.value?.type
-  console.info(type)
   switch (type) {
     // components/templates/PageDetail.vue -> 'TemplatesPageDetail'
     case 'PAGE': return resolveComponent('TemplatesPageDetail')
@@ -30,7 +29,12 @@ const viewComponent = computed(() => {
       else
         return resolveComponent('TemplatesPostDetail')
     }
-    case 'CATEGORY': return resolveComponent('TemplatesProjectList')
+    case 'CATEGORY': {
+      if (pageData.value.code == 'NEWS')
+        return resolveComponent('TemplatesNewsList')
+      else
+        return resolveComponent('TemplatesProjectList')
+    }
     case 'PROJECT': return resolveComponent('TemplatesProjectDetail')
     case 'PRODUCT': return resolveComponent('TemplatesProductDetail')
     default: return resolveComponent('TemplatesPageDetail')
@@ -43,6 +47,13 @@ useSeoMeta({
   description: () => pageData.value?.description,
   ogImage: () => pageData.value?.thumbnail
 })
+// useSeoMeta({
+//   titleTemplate: '',
+//   title,
+//   ogTitle: title,
+//   description,
+//   ogDescription: description
+// })
 </script>
 
 <template>

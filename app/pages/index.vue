@@ -1,57 +1,63 @@
 <script setup lang="ts">
 // Fetch home page data from API
-const { data: homeData, error } = await useAsyncData('home-page', async () => {
-  const response = await useAPI<Common.IResponseItems>('home')
-  return response.data
-})
+const company = computed(() => useCompanyStore().info)
+const { data: pageData } = await useAsyncData('home-page', async () => {
+  const [postHighLight, postNew, news] = await Promise.all([
+    // useAPI<Common.IResponseItem>('company/public'),
+    useAPI<Common.IResponseItems>('posts/public', {
+      method: 'POST',
+      body: { key: 'post', pins: 'POST_FEATURED', limit: 6, sort: '-createdAt' }
+    }),
+    useAPI<Common.IResponseItems>('posts/public', {
+      method: 'POST',
+      body: { key: 'post', limit: 6, sort: '-createdAt' }
+    }),
+    useAPI<Common.IResponseItems>('posts/public', {
+      method: 'POST',
+      body: { key: 'news', limit: 5, sort: '-createdAt' }
+    })
+  ])
 
-// Fallback data in case API fails
-const pageData = computed(() => homeData.value || {
-  hero: {
-    images: [
-      'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=2000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000&auto=format&fit=crop'
-    ]
-  },
-  about: {
-    title: 'Về LuxeDesign',
-    description: 'Chúng tôi tin rằng mỗi công trình không chỉ là một tài sản, mà còn là nơi vun đắp hạnh phúc và phản ánh dấu ấn cá nhân của gia chủ.',
-    images: [
-      'https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?w=800',
-      'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800',
-      'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=800'
-    ]
-  },
-  projects: {
-    title: 'Mẫu thiết kế mới nhất',
-    items: []
-  },
-  blog: {
-    title: 'Tin tức & Kinh nghiệm',
-    items: []
+  return {
+    postHighLight: {
+      title: 'Mẫu thiết kế nổi bật',
+      items: postHighLight.data?.items || [],
+    },
+    postNew: {
+      title: 'Mẫu thiết kế mới',
+      items: postNew.data?.items || []
+    },
+    news: {
+      title: 'Tin tức & Kinh nghiệm',
+      items: news.data?.items || []
+    }
   }
 })
 
 useSeoMeta({
-  title: 'LuxeDesign - Kiến tạo không gian sống đẳng cấp',
-  description: pageData.value.about?.description || 'Kiến tạo không gian sống đẳng cấp'
+  title: company?.value?.name || 'Công Ty Kiến Trúc Sư Bắc Kạn',
+  ogTitle: company?.value?.name || 'Công Ty Kiến Trúc Sư Bắc Kạn',
+  description: company?.value?.desc || 'Kiến tạo không gian sống đẳng cấp',
+  ogDescription: company?.value?.desc || 'Kiến tạo không gian sống đẳng cấp',
+  ogImage: company?.value?.logo?.url
 })
 </script>
 
 
 <template>
   <div class="font-body text-gray-900 dark:text-gray-100">
-    <HomeHero :images="pageData.hero?.images" />
+    <!-- <HomeHero :images="pageData?.company?.images.map((img: any) => img.url)" :slogan="pageData?.company?.slogan" /> -->
 
-    <HomeAbout :data="pageData.about" />
+    <!-- <HomeAbout :data="pageData?.company" /> -->
 
-    <HomeProjects :title="pageData.projects?.title" :items="pageData.projects?.items" />
+    <HomeProjects :title="pageData?.postHighLight?.title" :items="pageData?.postHighLight?.items" />
 
-    <HomeBlog :data="pageData.blog" />
+    <HomeProjects :title="pageData?.postNew?.title" :items="pageData?.postNew?.items" />
+
+    <HomeBlog :title="pageData?.news?.title" :items="pageData?.news?.items" />
 
     <USeparator />
 
-    <HomeCTA />
+    <HomeCTA :data="company" />
   </div>
 </template>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const props = defineProps<{
-  images?: string[]
+  images?: string[],
+  slogan?: string
 }>()
 
 const items = computed(() => props.images && props.images.length > 0 ? props.images : [
@@ -40,14 +41,15 @@ const items = computed(() => props.images && props.images.length > 0 ? props.ima
           class="font-display text-4xl md:text-6xl lg:text-7xl font-black text-white leading-tight drop-shadow-lg"
           :initial="{ opacity: 0, y: 60 }" :animate="{ opacity: 1, y: 0 }"
           :transition="{ duration: 0.8, delay: 0.2, ease: 'easeOut' }">
-          Kiến tạo không gian <br /> sống đẳng cấp
+          <!-- Kiến tạo không gian <br /> sống đẳng cấp -->
+          {{ slogan }}
         </Motion>
 
         <Motion class="flex flex-col sm:flex-row gap-4" :initial="{ opacity: 0, y: 30 }" :animate="{ opacity: 1, y: 0 }"
           :transition="{ duration: 0.8, delay: 0.5, ease: 'easeOut' }">
           <UButton size="xl"
             class="rounded-full px-10 py-4 font-bold font-display shadow-lg hover:scale-105 transition-transform"
-            color="primary" variant="solid" label="Xem dự án" />
+            color="primary" variant="solid" label="Xem dự án" to="/du-an" />
           <UButton size="xl"
             class="rounded-full px-10 py-4 font-bold font-display ring-2 ring-white text-white hover:bg-white hover:text-black shadow-lg hover:scale-105 transition-transform"
             variant="ghost" label="Tư vấn miễn phí" />

@@ -20,7 +20,10 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    if (body.key) filter.$and.push({ key: body.key })
+    if (body.key) {
+      const key = Array.isArray(body.key) ? body.key : [body.key]
+      filter.$and.push({ key: { $in: key } })
+    }
     if (body.groups && body.groups.length) filter.$and.push({ groups: { $in: body.groups } })
     const sortBy = body.sortBy || 'createdAt'
     const sortType = body.sortType || 1

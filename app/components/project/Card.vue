@@ -10,13 +10,13 @@ defineProps<{
       <div class="aspect-3/4 w-full relative">
         <NuxtImg :src="project.image" :alt="project.title" width="600" height="800" fit="cover" format="webp"
           loading="lazy" placeholder
-          class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
-        <div
+          class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-108" />
+        <!-- <div
           class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <div class="bg-white/20 backdrop-blur-sm p-3 rounded-full text-white">
             <UIcon name="i-lucide-search" class="w-8 h-8" />
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
 
