@@ -77,15 +77,15 @@ export default defineNuxtConfig({
     }
   },
 
-  routeRules: {
-    // '/docs': { redirect: '/docs/getting-started', prerender: false },
-    '/': { prerender: true },
-    '/api/menu/public': { swr: 3600 },
-    '/api/company/public': { swr: 3600 },
-    // '/api/**': {
-    //   cors: true
-    // }
-  },
+  // routeRules: {
+  //   // '/docs': { redirect: '/docs/getting-started', prerender: false },
+  //   '/': { prerender: true },
+  //   '/api/menu/public': { swr: 3600 },
+  //   '/api/company/public': { swr: 3600 },
+  //   // '/api/**': {
+  //   //   cors: true
+  //   // }
+  // },
 
   nitro: {
     preset: 'vercel',
