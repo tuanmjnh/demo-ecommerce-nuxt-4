@@ -66,12 +66,21 @@ const projects = computed(() => {
     // Resolve category name
     let categoryName = 'Khác'
 
+    let imageUrl = post.image?.url || '/unsplashImages/photo-1618221195710-dd6b41faaea6?w=600'
+
+    // Replace full URLs with aliases for NuxtImg
+    if (imageUrl.includes('https://images.unsplash.com')) {
+      imageUrl = imageUrl.replace('https://images.unsplash.com', '/unsplashImages')
+    } else if (imageUrl.includes('https://plus.unsplash.com')) {
+      imageUrl = imageUrl.replace('https://plus.unsplash.com', '/unsplashPlus')
+    }
+
     return {
       id: post._id || '',
       title: post.title,
       category: categoryName,
       // Access image.url from IFileAttach structure
-      image: post.image?.url || 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600',
+      image: imageUrl,
       description: post.desc || '',
       slug: post.slug
     }

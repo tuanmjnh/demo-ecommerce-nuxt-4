@@ -19,6 +19,20 @@ const project = computed(() => {
       ...p,
       ...content?.data, // Merge frontmatter data
 
+      // Transform main image URL
+      image: p.image ? {
+        ...p.image,
+        url: p.image.url?.replace('https://images.unsplash.com', '/unsplashImages')
+          .replace('https://plus.unsplash.com', '/unsplashPlus')
+      } : undefined,
+
+      // Transform gallery images URLs
+      images: p.images?.map(img => ({
+        ...img,
+        url: img.url?.replace('https://images.unsplash.com', '/unsplashImages')
+          .replace('https://plus.unsplash.com', '/unsplashPlus')
+      })) || [],
+
       // Map attributes
       // owner: getAttr('owner'),
       // area: getAttr('area'),
