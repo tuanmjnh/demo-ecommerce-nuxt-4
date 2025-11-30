@@ -8,7 +8,7 @@ const companyStore = useCompanyStore()
 const color = computed(() => colorMode.value === 'dark' ? '#020618' : 'white')
 
 // --- 1. Fetch Data ---
-await useAsyncData('global-data', async () => {
+const { error: fetchError } = await useAsyncData('global-data', async () => {
   const [menuRes, companyRes] = await Promise.all([
     useAPI<Common.IResponseItem>('menu/public'),
     useAPI<Common.IResponseItem>('company/public')
@@ -19,6 +19,10 @@ await useAsyncData('global-data', async () => {
 
   return true
 })
+
+if (fetchError.value) {
+  console.error('Global Data Fetch Error:', fetchError.value)
+}
 
 // --- 2. SEO Config ---
 useSeoMeta({
