@@ -44,6 +44,7 @@ const { data: projectsData, refresh } = await useAsyncData(`projects-list-${prop
     limit: limit.value,
     page: page.value,
     sort: '-createdAt',
+    key: 'news',
     groups: groupIds.length ? groupIds : undefined
   }
 
@@ -61,7 +62,7 @@ const { data: hotPostsData } = await useAsyncData('hot-posts-list', async () => 
   const filter: any = {
     limit: 5,
     sort: '-views', // Assuming views or just random/latest for now if views not available
-    key: 'post' // Or 'news' depending on requirement, using 'post' or 'news' broadly
+    key: 'news' // Or 'news' depending on requirement, using 'post' or 'news' broadly
   }
   const response = await useAPI<Common.IResponseItems>('posts/public', {
     method: 'POST',

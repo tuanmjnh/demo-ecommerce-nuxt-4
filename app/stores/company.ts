@@ -21,17 +21,15 @@ export const useCompanyStore = defineStore('companyStore', () => {
     if (info.value?._id) return
     try {
       const res = await useAPI<Common.IResponseItem>('company/public')
-      if (res.data) {
+      if (res?.data) {
         info.value = res.data
       }
     } catch (err) {
-      throw err
+      // Silent error
     }
   }
 
   // --- GETTERS ---
-
-  // 👇 Sửa lại đoạn này: Dùng biến 'config' và 'originUrl' đã khai báo ở trên
   const currentSiteUrl = computed(() => {
     // Ưu tiên config cứng (Production)
     if (config.public.siteUrl) {
@@ -71,6 +69,6 @@ export const useCompanyStore = defineStore('companyStore', () => {
     jsonLdSchema,
     currentSiteUrl
   }
-}, {
-  persist: true
-})
+})//, {
+//  persist: true
+//})

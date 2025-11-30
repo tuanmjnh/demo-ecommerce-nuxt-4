@@ -2,19 +2,21 @@
 const appConfig = useAppConfig()
 const colorMode = useColorMode()
 const menuStore = useMenuStore()
-const companyStore = useCompanyStore() // 👇 1. Gọi Store
+const companyStore = useCompanyStore()
 
 // Tính toán màu theme cho thanh browser
 const color = computed(() => colorMode.value === 'dark' ? '#020618' : 'white')
 
 // --- 1. Fetch Data ---
-await useAsyncData('init-company', async () => {
-  await companyStore.fetchCompany()
-  return true
-})
-// Gọi Menu luôn ở đây để đảm bảo Search có dữ liệu
-await useAsyncData('init-menu', async () => {
-  await menuStore.fetchMenu()
+await useAsyncData('global-data', async () => {
+  const [menuRes, companyRes] = await Promise.all([
+    useAPI<Common.IResponseItem>('menu/public'),
+    useAPI<Common.IResponseItem>('company/public')
+  ])
+
+  if (menuRes?.data) menuStore.flatItems = menuRes.data
+  if (companyRes?.data) companyStore.info = companyRes.data
+
   return true
 })
 
@@ -58,13 +60,10 @@ useHead({
   script: [
     {
       type: 'application/ld+json',
-      // 🟢 SỬA LẠI NHƯ SAU:
-      // 1. Đổi 'children' thành 'innerHTML' (Chuẩn HTML Script)
-      // 2. Dùng JSON.stringify() vì thẻ script chỉ chứa text, không chứa JS Object
       innerHTML: computed(() => {
         return companyStore.jsonLdSchema
           ? JSON.stringify(companyStore.jsonLdSchema)
-          : '' // Trả về chuỗi rỗng nếu chưa có data để tránh lỗi
+          : ''
       })
     }
   ]

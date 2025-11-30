@@ -31,9 +31,18 @@
 // or redirect to an error page
 // }
 const items = computed(() => useMenuStore().uiMenuItems)
-// console.log(items.value)
-// appStore.notify('testdslkgjsdlg', "test")
-// console.log(useNotify({ message: 'dsfsdg', title: 'tuanmjnh', type: 'secondary' }))
+// const menuStore = useMenuStore()
+
+// Fallback: Nếu SSR fail hoặc user F5 ở trang con mà mất menu -> Fetch lại client side
+// onMounted(async () => {
+//   if (!items.value.length) {
+//     console.log('AppHeader: Menu empty, fetching...')
+//     await menuStore.fetchMenu()
+//     console.log('AppHeader: Menu fetched, items:', items.value.length)
+//   } else {
+//     console.log('AppHeader: Menu already exists:', items.value.length)
+//   }
+// })
 </script>
 
 <template>

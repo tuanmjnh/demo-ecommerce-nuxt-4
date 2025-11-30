@@ -8,18 +8,19 @@ export const useMenuStore = defineStore('menuStore', () => {
   // --- STATE ---
   const flatItems = ref<Models.IMenu[]>([])
   const error = ref(null)
+
   // --- ACTIONS ---
   async function fetchMenu() {
-    // 1. Cache Check (Cookie/Persist)
-    if (flatItems.value.length > 0) return
+    if (flatItems.value.length) return
 
-    // try {
-    // 2. Gọi API (Dùng useAPI raw fetcher)
-    const res = await useAPI<Common.IResponseItem>('menu/public')
-    if (!res || !res.data) return
-    // if (res.data) {
-    flatItems.value = res.data
-    // console.log(res.data)
+    try {
+      const res = await useAPI<Common.IResponseItem>('menu/public')
+      if (res?.data) {
+        flatItems.value = res.data
+      }
+    } catch (err) {
+      // console.error('Failed to fetch menu:', err)
+    }
   }
 
   // --- GETTERS ---
@@ -136,8 +137,7 @@ export const useMenuStore = defineStore('menuStore', () => {
     uiMenuFooter,
     fetchMenu
   }
-}, {
-  // Enable Pinia Persistence (cookies) to prevent double-fetching on hydration
-  persist: true
-})
-
+})//, {
+// Enable Pinia Persistence (cookies) to prevent double-fetching on hydration
+// persist: true
+//})
