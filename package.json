@@ -10,7 +10,15 @@
     "lint": "eslint .",
     "typecheck": "nuxt typecheck",
     "prepare": "npx nuxi prepare",
-    "clear": "npx nuxi dev --clear"
+    "clear": "npx nuxi dev --clear",
+    "vercel:build": "npx vercel build --prod",
+    "vercel:push": "npx vercel deploy --prebuilt",
+    "vercel:dev": "npx vercel dev",
+    "deploy:vercel": "npx vercel dist --prod",
+    "deploy:vercel-exist": "npx vercel dist --prod --name bag-post",
+    "docker:build": "docker build -t tuanmjnhdeveloper/bag-post:v1 .",
+    "docker:run": "docker run -d -p 8000:80 tuanmjnhdeveloper/bag-post:v1",
+    "docker:push": "docker push tuanmjnhdeveloper/bag-post:v1"
   },
   "dependencies": {
     "@iconify-json/lucide": "^1.2.73",

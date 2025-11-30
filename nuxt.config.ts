@@ -9,7 +9,7 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     'nuxt-og-image',
     '@pinia/nuxt',
-    'pinia-plugin-persistedstate/nuxt',
+    // 'pinia-plugin-persistedstate/nuxt',
     '@nuxtjs/i18n',
     'motion-v/nuxt'
   ],
@@ -88,7 +88,7 @@ export default defineNuxtConfig({
   // },
 
   nitro: {
-    preset: 'vercel',
+    preset: 'vercel',//'node-server'
     // prerender: {
     //   routes: [
     //     '/'
@@ -118,13 +118,13 @@ export default defineNuxtConfig({
   //   storesDirs: ['app/stores/**']
   // },
   // Default Configuration for Persisted State Using Cookies
-  piniaPluginPersistedstate: {
-    storage: 'cookies',
-    cookieOptions: {
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 7 // Save for 7 days
-    }
-  },
+  // piniaPluginPersistedstate: {
+  //   storage: 'cookies',
+  //   cookieOptions: {
+  //     sameSite: 'lax',
+  //     maxAge: 60 * 60 * 24 * 7 // Save for 7 days
+  //   }
+  // },
   i18n: {
     // strategy: 'no_prefix',
     // legacy: false,

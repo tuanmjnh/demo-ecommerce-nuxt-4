@@ -4,7 +4,7 @@ FROM node:22-alpine AS builder
 WORKDIR /app
 
 # Copy the configuration file first to take advantage of cache
-COPY package.json package-lock.json ./
+COPY package.json ./
 
 # Install all libraries (including devDependencies to build)
 RUN npm install

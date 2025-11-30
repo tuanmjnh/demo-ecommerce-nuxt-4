@@ -1,0 +1,17 @@
+# Ignore local libraries (most important)
+node_modules
+npm-debug.log
+
+# Ignore git
+.git
+.gitignore
+
+# Ignore old build directories
+dist
+.output
+.nuxt
+
+# Ignore environment files (to avoid exposing keys if accidentally done)
+.env
+.DS_Store
+Dockerfile
