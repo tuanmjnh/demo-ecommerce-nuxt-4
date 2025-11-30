@@ -21,7 +21,7 @@ await useAsyncData('init-menu', async () => {
 // --- 2. SEO Config ---
 useSeoMeta({
   // Tiêu đề mặc định: "Trang con - Tên Công Ty"
-  titleTemplate: (titleChunk) => {
+  titleTemplate: (titleChunk?: string) => {
     return titleChunk
       ? `${titleChunk} - ${companyStore.companyName}`
       : companyStore.companyName

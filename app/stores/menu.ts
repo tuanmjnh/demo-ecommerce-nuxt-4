@@ -136,7 +136,8 @@ export const useMenuStore = defineStore('menuStore', () => {
     uiMenuFooter,
     fetchMenu
   }
-})//, {
-// Enable Pinia Persistence (cookies) to prevent double-fetching on hydration
-// persist: true
-// })
+}, {
+  // Enable Pinia Persistence (cookies) to prevent double-fetching on hydration
+  persist: true
+})
+

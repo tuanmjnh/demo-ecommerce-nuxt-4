@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { parseMarkdown } from '@nuxtjs/mdc/runtime'
+const company = computed(() => useCompanyStore().info)
 
 const props = defineProps<{ data?: any }>()
 
@@ -111,6 +112,10 @@ const project = computed(() => {
           <p class="font-display font-semibold text-primary-500">{{ project.cost || 'Liên hệ' }}</p>
         </div> -->
       </div>
+      <div class="mt-4 flex justify-end">
+        <AppShare :title="project.title" />
+      </div>
+
     </div>
 
     <div class="max-w-4xl mx-auto px-4 mt-16 space-y-16">
@@ -190,9 +195,10 @@ const project = computed(() => {
           Hãy để chúng tôi biến ngôi nhà trong mơ của bạn thành hiện thực. Liên hệ ngay để nhận được tư vấn chuyên sâu.
         </p>
         <div class="flex justify-center gap-4">
-          <UButton size="xl" color="primary" class="rounded-lg px-8 py-3 font-bold" label="Nhận tư vấn miễn phí" />
+          <UButton size="xl" color="primary" class="rounded-lg px-8 py-3 font-bold" label="Nhận tư vấn miễn phí"
+            :to="`https://zalo.me/${company?.hotline}`" target="_blank" />
           <UButton size="xl" variant="outline" color="neutral" class="rounded-lg px-8 py-3 font-bold"
-            label="Gọi Hotline" trailing-icon="i-lucide-phone" />
+            label="Gọi Hotline" trailing-icon="i-lucide-phone" :to="`tel:${company?.hotline}`" />
         </div>
       </div>
     </div>

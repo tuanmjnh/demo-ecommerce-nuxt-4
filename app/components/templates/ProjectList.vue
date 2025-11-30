@@ -28,10 +28,6 @@ watch(() => route.query.page, (newPage) => {
   page.value = Number(newPage) || 1
 })
 
-// ... (existing code) ...
-
-
-
 // Fetch projects from API
 const { data: projectsData, refresh } = await useAsyncData(`projects-list-${props.data?._id || 'all'}`, async () => {
   const groupIds = []
@@ -115,6 +111,15 @@ watch(activeCategory, () => {
   if (page.value !== 1) {
     router.push({ query: { ...route.query, page: 1 } })
   }
+})
+
+// Fix: Explicitly refresh when page changes via watcher if needed, 
+// but useAsyncData watch option should handle it. 
+// However, user reported issue in production.
+// Let's add the explicit refresh in the watcher as planned.
+watch(() => route.query.page, (newPage) => {
+  page.value = Number(newPage) || 1
+  refresh()
 })
 </script>
 

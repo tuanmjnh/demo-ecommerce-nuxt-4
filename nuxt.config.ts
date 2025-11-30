@@ -61,7 +61,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      titleTemplate: '%s - LuxeDesign',
+      titleTemplate: '%s - Công Ty Kiến Trúc Sư Bắc Kạn',
       meta: [{ name: 'viewport', content: 'width=device-width, initial-scale=1' }]
     }
   },

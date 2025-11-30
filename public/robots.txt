@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://bag-post.vercel.app/sitemap.xml

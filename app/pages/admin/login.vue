@@ -27,14 +27,14 @@ async function onSubmit() {
       deviceType: 'WEB',
       deviceName: 'Browser'
     })
-    
-    toast.add({ title: 'Login successful', color: 'green' })
+
+    toast.add({ title: 'Login successful', color: 'success' })
     navigateTo('/admin')
   } catch (error: any) {
-    toast.add({ 
-      title: 'Login failed', 
-      description: error.data?.message || error.message, 
-      color: 'red' 
+    toast.add({
+      title: 'Login failed',
+      description: error.data?.message || error.message,
+      color: 'error'
     })
   } finally {
     loading.value = false

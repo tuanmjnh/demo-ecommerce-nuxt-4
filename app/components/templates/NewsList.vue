@@ -125,6 +125,12 @@ watch(activeCategory, () => {
   }
 })
 
+// Fix: Explicitly refresh when page changes via watcher
+watch(() => route.query.page, (newPage) => {
+  page.value = Number(newPage) || 1
+  refresh()
+})
+
 const breadcrumbs = computed(() => [
   { label: 'Trang chủ', to: '/', icon: 'i-heroicons-home' },
   { label: 'Tin tức', to: '/tin-tuc' },
@@ -163,8 +169,11 @@ const breadcrumbs = computed(() => [
               <!-- Image -->
               <ULink :to="`/${item.slug}`" class="w-full md:w-1/3 shrink-0 overflow-hidden rounded-xl">
                 <div class="aspect-4/3 md:aspect-16/10 relative overflow-hidden">
-                  <img :src="item.image" :alt="item.title"
-                    class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" />
+                  <!-- <img :src="item.image" :alt="item.title"
+                    class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" /> -->
+                  <NuxtImg :src="item.image" :alt="item.title" width="320" height="240" fit="cover" format="webp"
+                    loading="lazy" :placeholder="10" zoom
+                    class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
                 </div>
               </ULink>
 
@@ -209,8 +218,12 @@ const breadcrumbs = computed(() => [
             <div class="space-y-6">
               <div v-for="(post, index) in hotPosts" :key="post.id" class="group flex gap-4">
                 <ULink :to="`/${post.slug}`" class="w-24 h-20 shrink-0 rounded-lg overflow-hidden">
-                  <img :src="post.image || 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=200'"
-                    class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" />
+                  <!-- <img :src="post.image || 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=200'"
+                    class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" /> -->
+                  <NuxtImg :src="post.image || 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=200'"
+                    :alt="post.title" width="128" height="128" fit="cover" format="webp" loading="lazy"
+                    :placeholder="10" zoom
+                    class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
                 </ULink>
                 <div class="flex-1">
                   <ULink :to="`/${post.slug}`">

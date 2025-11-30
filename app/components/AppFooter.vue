@@ -8,11 +8,16 @@ const menuFooter = computed(() => useMenuStore().uiMenuFooter)
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
         <div class="flex flex-col gap-4">
           <div class="flex items-center gap-4 text-text-light dark:text-text-dark">
-            <h2 class="font-display text-lg font-bold">{{ company?.name }} </h2>
+            <h2 class="font-display text-lg font-bold">
+              {{ company?.name }}
+            </h2>
           </div>
-          <p class="font-body text-sm text-text-light/80 dark:text-text-dark/80">Địa chỉ: {{ company?.address }}
+          <p class="font-body text-sm text-text-light/80 dark:text-text-dark/80">
+            Địa chỉ: {{ company?.address }}
           </p>
-          <p class="font-body text-sm text-text-light/80 dark:text-text-dark/80">Hotline: {{ company?.hotline }}</p>
+          <a :href="`tel:${company?.hotline}`" class="font-body text-sm text-text-light/80 dark:text-text-dark/80">
+            Hotline: {{ company?.hotline }}
+          </a>
         </div>
 
         <div class="flex flex-col gap-4">

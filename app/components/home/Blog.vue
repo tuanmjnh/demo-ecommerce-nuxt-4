@@ -38,7 +38,8 @@ defineProps<{
             transition-colors cursor-pointer border border-transparent 
             hover:border-gray-200 dark:hover:border-gray-700">
             <div class="bg-primary-50 dark:bg-primary-950 p-3 rounded-xl text-primary-500 shrink-0">
-              <!-- <UIcon :name="news.icon" class="w-6 h-6" /> -->
+              <NuxtImg :src="item.image.url" :alt="item.title" width="64" height="64" fit="cover" format="webp"
+                loading="lazy" :placeholder="10" class="w-16 h-16 object-cover rounded-lg" />
             </div>
             <div>
               <h4

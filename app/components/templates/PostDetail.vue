@@ -60,6 +60,11 @@ useSeoMeta({
       </ULink>
     </UPageHeader>
 
+    <div class="mt-4 flex justify-end">
+      <AppShare :title="data?.title" />
+    </div>
+
+
     <UPage>
       <UPageBody>
         <ContentRenderer v-if="content" :value="content" class="prose" />

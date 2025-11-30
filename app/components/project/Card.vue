@@ -8,7 +8,7 @@ defineProps<{
   <NuxtLink :to="`/${project.slug}`" class="group flex flex-col gap-3 cursor-pointer">
     <div class="relative w-full overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800">
       <div class="aspect-3/4 w-full relative">
-        <NuxtImg :src="project.image" :alt="project.title" width="600" height="800" fit="cover" format="webp"
+        <NuxtImg :src="project.image" :alt="project.title" width="400" height="600" fit="cover" format="webp"
           loading="lazy" placeholder
           class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-108" />
         <!-- <div

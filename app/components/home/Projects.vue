@@ -34,7 +34,7 @@ defineProps<{
             </template>
 
             <template #default>
-              <div class="flex flex-col gap-2 bg-white dark:bg-gray-900">
+              <div class="flex flex-col gap-2 bg-white dark:bg-default group-hover:bg-transparent">
                 <h3
                   class="font-display text-xl font-bold text-gray-900 dark:text-white group-hover:text-primary-400 transition-colors">
                   {{ item.title }}
