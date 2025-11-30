@@ -1,7 +1,13 @@
-export default defineNuxtRouteMiddleware((to, from) => {
-  const authStore = useAuthStore()
+export default defineNuxtRouteMiddleware(async (to, from) => {
+  const authState = useAuthState()
 
-  if (!authStore.loggedIn) {
+  // If user is not logged in, try to fetch user details
+  if (!authState.loggedIn.value) {
+    await authState.fetchUser()
+  }
+
+  // If still not logged in, redirect to login page
+  if (!authState.loggedIn.value) {
     return navigateTo('/admin/login')
   }
 })

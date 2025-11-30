@@ -1,10 +1,11 @@
 <script setup lang="ts">
-const companyStore = useCompanyStore()
-// const info = computed(() => useCompanyStore().info)
+const companyState = useCompanyState()
+const logo = computed(() => companyState.logoUrl.value)
+const name = computed(() => companyState.companyName.value)
 </script>
 <template>
   <!-- <NuxtLink to="/" class="flex items-center gap-2"> -->
-  <img v-if="companyStore.logoUrl" :src="companyStore.logoUrl" :alt="companyStore.companyName" class="object-contain" />
+  <img v-if="logo" :src="logo" :alt="name" class="object-contain" />
   <!-- {{ companyStore.info?.shortName }} -->
   <!-- </NuxtLink> -->
   <!-- <svg

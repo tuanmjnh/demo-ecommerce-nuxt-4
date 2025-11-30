@@ -1,20 +1,17 @@
 <script setup lang="ts">
 import { parseMarkdown } from '@nuxtjs/mdc/runtime'
-const company = computed(() => useCompanyStore().info)
+
+const companyState = useCompanyState()
+const company = computed(() => companyState.info.value)
 
 const props = defineProps<{ data?: any }>()
 
 const content = await parseMarkdown(props.data?.content || '')
-// const images = await parseMarkdown(props.data?.images.map((img: any) =>
-//   `<img :src="${img.url}" :alt="${img.display_name}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />`).join('\n') || '')
+
 // Lấy thông tin dự án dựa trên ID từ URL
 const project = computed(() => {
   if (props.data) {
     const p = props.data as Models.IPost
-
-    // Helper to get attribute value
-    // const getAttr = (key: string) => p.attributes?.find(a => a.key === key)?.value
-    // console.log(p.attributes)
 
     return {
       ...p,
@@ -33,33 +30,11 @@ const project = computed(() => {
         url: img.url?.replace('https://images.unsplash.com', '/unsplashImages')
           .replace('https://plus.unsplash.com', '/unsplashPlus')
       })) || [],
-
-      // Map attributes
-      // owner: getAttr('owner'),
-      // area: getAttr('area'),
-      // style: getAttr('style'),
-      // year: getAttr('year'),
-      // cost: getAttr('cost'),
-
-      // Map images to gallery (exclude main image if needed, or include all)
-      // gallery: p.images?.map(img => img.url) || [],
-
-      // Map specific content sections if stored in attributes or separate fields
-      // intro: p.desc
-      // livingRoom: getAttr('livingRoom'),
-      // bedroom: getAttr('bedroom')
     }
   }
 
   return null
 })
-
-// Mock data chi tiết (nếu project không đủ field)
-// const details = computed(() => ({
-//   intro: project.value?.intro || 'Dự án The River là câu chuyện về việc kiến tạo một không gian sống hiện đại, thoáng đãng và ngập tràn ánh sáng tự nhiên. Gia chủ mong muốn một tổ ấm không chỉ đẹp về thẩm mỹ mà còn phải tối ưu công năng.',
-//   livingRoom: project.value?.livingRoom || 'Để đáp ứng yêu cầu về một không gian mở, chúng tôi đã loại bỏ các vách ngăn không cần thiết, sử dụng sofa lớn làm trung tâm. Gam màu chủ đạo là trắng, xám và gỗ sồi tự nhiên.',
-//   bedroom: project.value?.bedroom || 'Phòng ngủ master được thiết kế như một không gian nghỉ dưỡng thu nhỏ, ưu tiên sự yên tĩnh và thư giãn. Hệ thống đèn chiếu sáng dịu nhẹ giúp không gian thêm phần ấm cúng.'
-// }))
 </script>
 
 <template>
@@ -91,26 +66,6 @@ const project = computed(() => {
           <p class="text-xs font-bold text-gray-400 uppercase mb-1">{{ attr.key }}</p>
           <p class="font-display font-semibold text-gray-900 dark:text-white">{{ attr.value || 'Liên hệ' }}</p>
         </div>
-        <!-- <div class="text-center md:text-left">
-          <p class="text-xs font-bold text-gray-400 uppercase mb-1">Chủ đầu tư</p>
-          <p class="font-display font-semibold text-gray-900 dark:text-white">{{ project.owner || 'Đang cập nhật' }}</p>
-        </div>
-        <div class="text-center md:text-left">
-          <p class="text-xs font-bold text-gray-400 uppercase mb-1">Diện tích</p>
-          <p class="font-display font-semibold text-gray-900 dark:text-white">{{ project.area || 'Đang cập nhật' }}</p>
-        </div>
-        <div class="text-center md:text-left">
-          <p class="text-xs font-bold text-gray-400 uppercase mb-1">Phong cách</p>
-          <p class="font-display font-semibold text-gray-900 dark:text-white">{{ project.style || 'Đang cập nhật' }}</p>
-        </div>
-        <div class="text-center md:text-left">
-          <p class="text-xs font-bold text-gray-400 uppercase mb-1">Năm</p>
-          <p class="font-display font-semibold text-gray-900 dark:text-white">{{ project.year || 'Đang cập nhật' }}</p>
-        </div>
-        <div class="text-center md:text-left">
-          <p class="text-xs font-bold text-gray-400 uppercase mb-1">Chi phí</p>
-          <p class="font-display font-semibold text-primary-500">{{ project.cost || 'Liên hệ' }}</p>
-        </div> -->
       </div>
       <div class="mt-4 flex justify-end">
         <AppShare :title="project.title" />
@@ -131,42 +86,6 @@ const project = computed(() => {
         <!-- Render main content if available -->
         <ContentRenderer v-if="content" :value="content" class="prose dark:prose-invert max-w-none mt-4" />
       </Motion>
-
-      <!-- <Motion v-if="project.gallery?.[0]" class="w-full aspect-video rounded-xl overflow-hidden shadow-lg"
-        :initial="{ opacity: 0, scale: 0.95 }" :while-in-view="{ opacity: 1, scale: 1 }"
-        :in-view-options="{ once: true }">
-        <NuxtImg v-if="project.gallery?.[0]" :src="project.gallery?.[0]" :alt="project.title" width="800" height="600"
-          fit="cover" format="webp" loading="lazy" placeholder
-          class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
-      </Motion>
-
-      <Motion class="space-y-4" :initial="{ opacity: 0, y: 20 }" :while-in-view="{ opacity: 1, y: 0 }"
-        :in-view-options="{ once: true }">
-        <h3 class="font-display text-2xl font-bold text-gray-900 dark:text-white">
-          Giải pháp phòng khách
-        </h3>
-        <p class="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">
-          {{ project?.desc }}
-        </p>
-      </Motion>
-
-      <Motion v-if="project.gallery?.[1]" class="w-full aspect-video rounded-xl overflow-hidden shadow-lg"
-        :initial="{ opacity: 0, scale: 0.95 }" :while-in-view="{ opacity: 1, scale: 1 }"
-        :in-view-options="{ once: true }">
-        <NuxtImg v-if="project.gallery?.[1]" :src="project.gallery[1]" :alt="project.title" width="800" height="600"
-          fit="cover" format="webp" loading="lazy" placeholder
-          class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
-      </Motion>
-
-      <Motion class="space-y-4" :initial="{ opacity: 0, y: 20 }" :while-in-view="{ opacity: 1, y: 0 }"
-        :in-view-options="{ once: true }">
-        <h3 class="font-display text-2xl font-bold text-gray-900 dark:text-white">
-          Thiết kế phòng ngủ Master
-        </h3>
-        <p class="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">
-          {{ project?.desc }}
-        </p>
-      </Motion> -->
     </div>
 
     <div v-if="project.images && project.images.length > 0" class="max-w-7xl mx-auto px-4 mt-20">
@@ -182,7 +101,6 @@ const project = computed(() => {
               class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
           </Motion>
         </div>
-        <!-- <ContentRenderer :value="images" /> -->
       </div>
     </div>
 

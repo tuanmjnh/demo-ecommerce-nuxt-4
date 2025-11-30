@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // Fetch home page data from API
-const company = computed(() => useCompanyStore().info)
+const companyState = useCompanyState()
+const companyInfo = computed(() => companyState.info.value)
 const { data: pageData } = await useAsyncData('home-page', async () => {
   const [postHighLight, postNew, news] = await Promise.all([
     // useAPI<Common.IResponseItem>('company/public'),
@@ -17,7 +18,6 @@ const { data: pageData } = await useAsyncData('home-page', async () => {
       body: { key: 'news', limit: 5, sort: '-createdAt' }
     })
   ])
-
   return {
     postHighLight: {
       title: 'Mẫu thiết kế nổi bật',
@@ -35,11 +35,11 @@ const { data: pageData } = await useAsyncData('home-page', async () => {
 })
 
 useSeoMeta({
-  title: company?.value?.name || 'Công Ty Kiến Trúc Sư Bắc Kạn',
-  ogTitle: company?.value?.name || 'Công Ty Kiến Trúc Sư Bắc Kạn',
-  description: company?.value?.desc || 'Kiến tạo không gian sống đẳng cấp',
-  ogDescription: company?.value?.desc || 'Kiến tạo không gian sống đẳng cấp',
-  ogImage: company?.value?.logo?.url
+  title: companyInfo.value?.name || 'Công Ty Kiến Trúc Sư Bắc Kạn',
+  ogTitle: companyInfo.value?.name || 'Công Ty Kiến Trúc Sư Bắc Kạn',
+  description: companyInfo.value?.desc || 'Kiến tạo không gian sống đẳng cấp',
+  ogDescription: companyInfo.value?.desc || 'Kiến tạo không gian sống đẳng cấp',
+  ogImage: companyInfo.value?.logo?.url
 })
 </script>
 
@@ -58,6 +58,6 @@ useSeoMeta({
 
     <USeparator />
 
-    <HomeCTA :data="company" />
+    <HomeCTA :data="companyInfo" />
   </div>
 </template>

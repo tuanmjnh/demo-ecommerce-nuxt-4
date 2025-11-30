@@ -3,7 +3,7 @@
 import type { CommandPaletteGroup, CommandPaletteItem } from '#ui/types'
 
 const router = useRouter()
-const menuStore = useMenuStore()
+const menuState = useMenuState()
 const isOpen = defineModel<boolean>('modelValue')
 
 // 1. Map Labels
@@ -45,7 +45,7 @@ const resolvePath = (item: Models.IMenu): string => {
  * Trả về mảng CommandPaletteGroup[]
  */
 const groups = computed<CommandPaletteGroup[]>(() => {
-  const items = menuStore.flatItems || []
+  const items = menuState.flatItems.value || []
 
   // Helper map item -> CommandPaletteItem
   const mapToCommand = (item: Models.IMenu): CommandPaletteItem => {

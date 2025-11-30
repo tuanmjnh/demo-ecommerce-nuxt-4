@@ -1,14 +1,10 @@
-import { defineStore } from 'pinia'
+export const useAuthState = () => {
+  const user = useState<Models.IUser | null>('auth-user', () => null)
+  const accessToken = useState<string | null>('auth-access-token', () => null)
+  const refreshToken = useState<string | null>('auth-refresh-token', () => null)
+  const loggedIn = useState<boolean>('auth-logged-in', () => false)
+  const loading = useState<boolean>('auth-loading', () => false)
 
-export const useAuthStore = defineStore('auth', () => {
-  // --- STATE ---
-  const user = ref<Models.IUser | null>(null)
-  const accessToken = ref<string | null>(null)
-  const refreshToken = ref<string | null>(null)
-  const loggedIn = ref(false)
-  const loading = ref(false)
-
-  // --- ACTIONS ---
   async function login(credentials: any) {
     loading.value = true
     try {
@@ -39,7 +35,15 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function fetchUser() {
-    if (!accessToken.value) return
+    if (!accessToken.value) {
+      // Try to recover from cookie if state is empty (e.g. hard refresh)
+      const tokenCookie = useCookie('token')
+      if (tokenCookie.value) {
+        accessToken.value = tokenCookie.value
+      } else {
+        return
+      }
+    }
 
     try {
       const res = await useAPI<Common.IResponseItem>('auth/me')
@@ -76,6 +80,4 @@ export const useAuthStore = defineStore('auth', () => {
     fetchUser,
     logout
   }
-}, {
-  persist: true
-})
+}

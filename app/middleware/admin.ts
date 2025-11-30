@@ -1,15 +1,11 @@
-export default defineNuxtRouteMiddleware((to, from) => {
-  const authStore = useAuthStore()
+export default defineNuxtRouteMiddleware(async (to, from) => {
+  const authState = useAuthState()
 
-  if (!authStore.loggedIn) {
-    return navigateTo('/admin/login')
+  if (!authState.loggedIn.value) {
+    await authState.fetchUser()
   }
 
-  // Check if user has admin role
-  // Assuming 'ADMIN' or 'SUPER_ADMIN' role exists
-  const isAdmin = authStore.user?.roles?.some(role => ['ADMIN', 'SUPER_ADMIN'].includes(role))
-
-  if (!isAdmin) {
-    return navigateTo('/')
+  if (!authState.loggedIn.value) {
+    return navigateTo('/admin/login')
   }
 })

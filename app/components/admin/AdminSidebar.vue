@@ -20,10 +20,18 @@ const links = [{
   icon: 'i-lucide-settings',
   to: '/admin/settings'
 }]
+
+const authState = useAuthState()
+const user = computed(() => authState.user.value)
+
+const logout = () => {
+  authState.logout()
+}
 </script>
 
 <template>
-  <div class="flex flex-col border-r border-gray-200 dark:border-gray-800 h-screen w-64 bg-white dark:bg-gray-900 sticky top-0">
+  <div
+    class="flex flex-col border-r border-gray-200 dark:border-gray-800 h-screen w-64 bg-white dark:bg-gray-900 sticky top-0">
     <div class="p-4 border-b border-gray-200 dark:border-gray-800 flex items-center gap-2">
       <AppLogo class="h-8 w-auto" />
       <span class="font-bold text-lg">Admin</span>
@@ -34,14 +42,7 @@ const links = [{
     </div>
 
     <div class="p-4 border-t border-gray-200 dark:border-gray-800">
-      <UButton
-        icon="i-lucide-log-out"
-        color="gray"
-        variant="ghost"
-        label="Logout"
-        block
-        @click="useAuthStore().logout()"
-      />
+      <UButton icon="i-lucide-log-out" color="neutral" variant="ghost" label="Logout" block @click="logout()" />
     </div>
   </div>
 </template>

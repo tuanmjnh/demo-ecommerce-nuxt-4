@@ -1,11 +1,10 @@
-import { defineStore } from 'pinia'
-export const usePostStore = defineStore('postStore', () => {
-  const list = ref<Models.IPost[]>([])
-  const detail = ref<Models.IPost | null>(null)
-  const related = ref<Models.IPost[]>([])
-  const loading = ref(false)
-  const error = ref<string | null>(null)
-  const pagination = ref({ page: 1, limit: 10, total: 0 })
+export const usePostState = () => {
+  const list = useState<Models.IPost[]>('post-list', () => [])
+  const detail = useState<Models.IPost | null>('post-detail', () => null)
+  const related = useState<Models.IPost[]>('post-related', () => [])
+  const loading = useState<boolean>('post-loading', () => false)
+  const error = useState<string | null>('post-error', () => null)
+  const pagination = useState('post-pagination', () => ({ page: 1, limit: 10, total: 0 }))
 
   const fetchList = async (params = {}) => {
     loading.value = true
@@ -50,4 +49,4 @@ export const usePostStore = defineStore('postStore', () => {
   }
 
   return { list, detail, related, loading, error, pagination, fetchList, fetchDetailBySlug, fetchRelated }
-})
+}

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 const appConfig = useAppConfig()
 const colorMode = useColorMode()
-const menuStore = useMenuStore()
-const companyStore = useCompanyStore()
+const menuState = useMenuState()
+const companyState = useCompanyState()
 
 // Tính toán màu theme cho thanh browser
 const color = computed(() => colorMode.value === 'dark' ? '#020618' : 'white')
@@ -14,9 +14,9 @@ const { error: fetchError } = await useAsyncData('global-data', async () => {
     useAPI<Common.IResponseItem>('company/public')
   ])
 
-  if (menuRes?.data) menuStore.flatItems = menuRes.data
-  if (companyRes?.data) companyStore.info = companyRes.data
-
+  if (menuRes?.data) menuState.flatItems.value = menuRes.data
+  if (companyRes?.data) companyState.info.value = companyRes.data
+  console.log(companyState.info.value)
   return true
 })
 
@@ -29,22 +29,22 @@ useSeoMeta({
   // Tiêu đề mặc định: "Trang con - Tên Công Ty"
   titleTemplate: (titleChunk?: string) => {
     return titleChunk
-      ? `${titleChunk} - ${companyStore.companyName}`
-      : companyStore.companyName
+      ? `${titleChunk} - ${companyState.companyName.value}`
+      : companyState.companyName.value
   },
 
   // Mô tả lấy từ SEO config của công ty hoặc fallback
-  description: () => companyStore.info?.seo?.desc || `Trang chủ ${companyStore.companyName}`,
+  description: () => companyState.info.value?.seo?.desc || `Trang chủ ${companyState.companyName.value}`,
 
   // Open Graph (Facebook/Zalo)
-  ogTitle: () => companyStore.companyName,
-  ogDescription: () => companyStore.info?.seo?.desc,
+  ogTitle: () => companyState.companyName.value,
+  ogDescription: () => companyState.info.value?.seo?.desc,
   // Ưu tiên lấy ảnh Banner, nếu không có thì lấy Logo
-  ogImage: () => companyStore.info?.banner?.url || companyStore.logoUrl,
+  ogImage: () => companyState.info.value?.banner?.url || companyState.logoUrl.value,
 
   // Twitter
   twitterCard: 'summary_large_image',
-  twitterImage: () => companyStore.info?.banner?.url || companyStore.logoUrl,
+  twitterImage: () => companyState.info.value?.banner?.url || companyState.logoUrl.value,
 })
 
 // --- 3. Cấu hình Head
@@ -65,8 +65,8 @@ useHead({
     {
       type: 'application/ld+json',
       innerHTML: computed(() => {
-        return companyStore.jsonLdSchema
-          ? JSON.stringify(companyStore.jsonLdSchema)
+        return companyState.jsonLdSchema.value
+          ? JSON.stringify(companyState.jsonLdSchema.value)
           : ''
       })
     }

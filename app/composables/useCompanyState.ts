@@ -1,23 +1,17 @@
-import { defineStore } from 'pinia'
-
-export const useCompanyStore = defineStore('companyStore', () => {
-  // --- 1. GỌI COMPOSABLE Ở ĐÂY (SAFE ZONE) ---
-  // Gọi ngay lúc khởi tạo store, context đang tồn tại
+export const useCompanyState = () => {
   const config = useRuntimeConfig()
 
-  // Lấy URL từ request ngay lúc setup luôn (để tránh gọi lại trong computed)
+  // Initialize originUrl
   let originUrl = 'https://website-cua-ban.com'
   try {
     originUrl = useRequestURL().origin
   } catch (e) {
-    // Fallback nếu chạy ở môi trường không có request context
+    // Fallback
   }
 
-  // --- STATE ---
-  const info = ref<Models.ICompany | null>(null)
+  const info = useState<Models.ICompany | null>('company-info', () => null)
 
-  // --- ACTIONS ---
-  async function fetchCompany() {
+  const fetchCompany = async () => {
     if (info.value?._id) return
     try {
       const res = await useAPI<Common.IResponseItem>('company/public')
@@ -29,13 +23,10 @@ export const useCompanyStore = defineStore('companyStore', () => {
     }
   }
 
-  // --- GETTERS ---
   const currentSiteUrl = computed(() => {
-    // Ưu tiên config cứng (Production)
     if (config.public.siteUrl) {
       return config.public.siteUrl
     }
-    // Fallback về URL tự động detect
     return originUrl
   })
 
@@ -49,7 +40,7 @@ export const useCompanyStore = defineStore('companyStore', () => {
       '@context': 'https://schema.org',
       '@type': 'Organization',
       name: info.value.name,
-      url: currentSiteUrl.value, // Dùng giá trị đã tính toán
+      url: currentSiteUrl.value,
       logo: logoUrl.value,
       contactPoint: {
         '@type': 'ContactPoint',
@@ -69,6 +60,4 @@ export const useCompanyStore = defineStore('companyStore', () => {
     jsonLdSchema,
     currentSiteUrl
   }
-})//, {
-//  persist: true
-//})
+}

@@ -1,7 +1,11 @@
 <script setup lang="ts">
-const company = computed(() => useCompanyStore().info)
-const menuFooter = computed(() => useMenuStore().uiMenuFooter)
+const menuState = useMenuState()
+const companyState = useCompanyState()
+
+const menuFooter = computed(() => menuState.uiMenuFooter.value)
+const company = computed(() => companyState.info.value)
 </script>
+
 <template>
   <footer class="w-full bg-gray-100 dark:bg-gray-900">
     <div class="max-w-7xl mx-auto px-4 sm:px-10 py-16">
@@ -25,8 +29,6 @@ const menuFooter = computed(() => useMenuStore().uiMenuFooter)
           <ul class="space-y-2">
             <li v-for="(item, key) in menuFooter" :key="key">
               <ULink :to="item.url || '#'">{{ item.title }}</ULink>
-              <!-- <a href="#" class="font-body text-sm text-text-light/80 hover:text-primary transition-colors">
-                {{ item.title }}</a> -->
             </li>
           </ul>
         </div>

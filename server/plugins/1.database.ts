@@ -5,8 +5,8 @@ export default defineNitroPlugin(async (nitroApp) => {
     // Get priority from environment variable, fallback to localhost
     const mongodbUri = config.mongodbUri;
     const dbName = config.mongodbName;
-    // console.log('mongodbUri', mongodbUri)
-    // console.log('dbName', dbName)
+    console.log('mongodbUri', mongodbUri)
+    console.log('dbName', dbName)
     // Connect DB
     await connectToMongoDB(mongodbUri, dbName);
 

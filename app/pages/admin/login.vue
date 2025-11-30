@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import * as z from 'zod'
-import type { FormSubmitEvent } from '@nuxt/ui'
 definePageMeta({
   layout: 'auth'
 })
 
-const authStore = useAuthStore()
+const authState = useAuthState()
 const toast = useToast()
 
 const state = reactive({
@@ -13,14 +11,13 @@ const state = reactive({
   password: ''
 })
 
-const loading = ref(false)
+const loading = computed(() => authState.loading.value)
 
 async function onSubmit() {
   if (!state.username || !state.password) return
 
-  loading.value = true
   try {
-    await authStore.login({
+    const success = await authState.login({
       username: state.username,
       password: state.password,
       deviceId: 'web',
@@ -28,16 +25,18 @@ async function onSubmit() {
       deviceName: 'Browser'
     })
 
-    toast.add({ title: 'Login successful', color: 'success' })
-    navigateTo('/admin')
+    if (success) {
+      toast.add({ title: 'Login successful', color: 'success' })
+      navigateTo('/admin')
+    } else {
+      toast.add({ title: 'Login failed', color: 'error' })
+    }
   } catch (error: any) {
     toast.add({
       title: 'Login failed',
       description: error.data?.message || error.message,
       color: 'error'
     })
-  } finally {
-    loading.value = false
   }
 }
 </script>

@@ -89,12 +89,12 @@ export default defineNuxtConfig({
 
   nitro: {
     preset: 'vercel',//'node-server'
-    // prerender: {
-    //   routes: [
-    //     '/'
-    //   ],
-    //   crawlLinks: true
-    // }
+    prerender: {
+      routes: [
+        '/'
+      ],
+      crawlLinks: true
+    }
   },
 
   eslint: {
