@@ -1,92 +1,82 @@
 import mongoose, { type ClientSession, type Document, type FilterQuery, type UpdateQuery } from 'mongoose'
 
 export const CommonService = {
-  /** Get paginated list */
-  // async findAll<T extends Document>(Model: mongoose.Model<T>, filter: FilterQuery<T> = {}, options: { page?: number; limit?: number; sort?: any } = {}) {
-  //   const { page = 1, limit = 20, sort = { created: -1 } } = options
-  //   const skip = (page - 1) * limit
 
-  //   const [items, total] = await Promise.all([
-  //     Model.find(filter).sort(sort).skip(skip).limit(limit),
-  //     Model.countDocuments(filter)
-  //   ])
-
-  //   return { items, total, page, limit }
-  // },
-
+  /** * ✅ OPTIMIZED: Get paginated list 
+   * Sử dụng .lean() để giảm tải bộ nhớ cho Vercel 
+   */
   async findAll<T extends Document>(
     Model: mongoose.Model<T>,
     filter: FilterQuery<T> = {},
     options: { page?: number; limit?: number; sort?: any } = {}
   ) {
-    // 1. Destructure and set default values
-    // 'inputLimit' preserves the original value (potentially undefined) to check for pagination mode
+    // 1. Setup variables
     const { page = 1, limit: inputLimit, sort } = options;
-
-    // Decide whether to paginate. If 'inputLimit' is undefined, we return all data.
     const isPaginated = inputLimit !== undefined;
-
-    // If not paginating, Mongoose limit(0) means 'no limit' (return all).
     const limit = inputLimit ?? 0;
-
-    // Calculate skip offset (only needed if paginated)
     const skip = isPaginated ? (page - 1) * limit : 0;
 
-    // 2. Define the base find query
-    let findQuery = sort ? Model.find(filter).sort(sort) : Model.find(filter);
+    // 2. Build Query with .lean()
+    let findQuery = Model.find(filter).lean();
 
-    // Apply skip and limit ONLY IF pagination is requested
+    if (sort) {
+      findQuery = findQuery.sort(sort);
+    }
+
     if (isPaginated) {
       findQuery = findQuery.skip(skip).limit(limit);
     }
 
-    // 3. Execute concurrently (Promise.all)
+    // 3. Execute concurrently
     const [items, total] = await Promise.all([
-      findQuery.exec(), // Fetch the documents (items)
-
-      // Only count total documents if in pagination mode.
-      // Otherwise, resolve with 0 as 'items.length' will be used for the total count.
-      isPaginated ? Model.countDocuments(filter) : Promise.resolve(0)
+      findQuery.exec(),
+      // Count documents cũng cần exec()
+      isPaginated ? Model.countDocuments(filter).exec() : Promise.resolve(0)
     ]);
 
-    // 4. Return results based on the mode
+    // 4. Return result
     if (isPaginated) {
-      // Pagination Mode
       return { items, total, page, limit };
     } else {
-      // Non-Paginated (All Data) Mode
-      // Total count is the number of items fetched.
       return { items, total: items.length, page: 1, limit: items.length };
     }
   },
 
+  /** * ✅ OPTIMIZED: Get list matching filter 
+   */
   async findAllMatching<T extends Document>(
     Model: mongoose.Model<T>,
     filter: FilterQuery<T> = {},
     options: { sort?: any } = {}
   ) {
-    const { sort = { created: -1 } } = options
-    const items = await Model.find(filter).sort(sort)
-    return items
+    const { sort = { createdAt: -1 } } = options
+    // Thêm .lean()
+    return await Model.find(filter).sort(sort).lean().exec()
   },
 
-  /** Get details by ID */
+  /** * ✅ OPTIMIZED: Get details by ID 
+   */
   async findById<T extends Document>(Model: mongoose.Model<T>, id: string) {
-    return await Model.findById(new mongoose.Types.ObjectId(id))
+    if (!mongoose.Types.ObjectId.isValid(id)) return null;
+    // Thêm .lean()
+    return await Model.findById(new mongoose.Types.ObjectId(id)).lean().exec()
   },
 
-  /** Full text search (if there is a text index) */
+  /** * ✅ OPTIMIZED: Full text search 
+   */
   async search<T extends Document>(Model: mongoose.Model<T>, keyword: string) {
-    return await Model.find({ $text: { $search: keyword } } as any)
+    // Thêm .lean()
+    return await Model.find({ $text: { $search: keyword } } as any).lean().exec()
   },
 
-  /** Get the distinct list */
+  /** * Get distinct list (Distinct trả về array primitive nên không cần lean)
+   */
   async distinct<T extends Document>(Model: mongoose.Model<T>, key: string, text: string) {
     const filter: Record<string, any> = {}
-    // if (text) {
-    filter[key] = new RegExp(text, 'i')
-    return await Model.distinct(key, filter)
-    // } else return await Model.distinct(key)
+    if (text) {
+      filter[key] = new RegExp(text, 'i')
+    }
+    return await Model.distinct(key, filter).exec()
   },
 
   async distinctByIds<T extends Document>(Model: mongoose.Model<T>, key: keyof T, ids: (string | mongoose.Types.ObjectId)[], extraFilter: Record<string, any> = {}) {
@@ -95,59 +85,73 @@ export const CommonService = {
       const objectIds = ids.map(id => new mongoose.Types.ObjectId(id))
       filter._id = { $in: objectIds }
     }
-    return await Model.distinct(key as string, filter)
+    return await Model.distinct(key as string, filter).exec()
   },
 
-  /** Find one by condition */
+  /** * ✅ OPTIMIZED: Find one 
+   */
   async findOne<T extends Document>(Model: mongoose.Model<T>, filter: FilterQuery<T>) {
-    return await Model.findOne(filter)
+    // Thêm .lean()
+    return await Model.findOne(filter).lean().exec()
   },
 
-  /** Check if exist (simpler syntax) */
+  /** * Check if exist 
+   */
   async exists<T extends Document>(Model: mongoose.Model<T>, filter: FilterQuery<T>, excludeId?: string) {
     if (excludeId) filter._id = { $ne: excludeId }
-    return !!(await Model.exists(filter))
+    const result = await Model.exists(filter)
+    return !!result
   },
 
+  /** * ✅ OPTIMIZED: Check exist custom field
+   */
   async checkExist<T extends mongoose.Document>(model: mongoose.Model<T>, field: keyof T, value: any, excludeId?: string): Promise<boolean> {
     const query: any = { [field]: value }
-    // If there is excludeId (in case of update) then ignore it
     if (excludeId) query._id = { $ne: excludeId }
-    const exist = await model.findOne(query).lean()
+    // Chỉ select _id cho nhẹ
+    const exist = await model.findOne(query).select('_id').lean().exec()
     return !!exist
   },
 
   async checkExistMulti<T extends mongoose.Document>(model: mongoose.Model<T>, conditions: Partial<Record<keyof T, any>>, excludeId?: string): Promise<boolean> {
     const query: any = { ...conditions }
     if (excludeId) query._id = { $ne: excludeId }
-
-    const exist = await model.findOne(query).lean()
+    const exist = await model.findOne(query).select('_id').lean().exec()
     return !!exist
   },
 
-  /** Create new */
+  /** * Create new 
+   */
   async create<T extends Document>(Model: mongoose.Model<T>, data: Partial<T>, session?: ClientSession) {
-    // if (uniqueKey && data[uniqueKey]) {
-    //   const exist = await Model.findOne({ [uniqueKey]: (data[uniqueKey] as any)?.toUpperCase?.() })
-    //   if (exist) throw new Error('exist')
-    // }
-    data._id = new mongoose.Types.ObjectId()
+    // Với create thì không dùng lean() vì cần trả về document để có thể save tiếp nếu cần logic sau đó
+    // Tuy nhiên return về API thì object này sẽ được serialize JSON
+    // data._id = new mongoose.Types.ObjectId() // Mongoose tự tạo ID, không cần dòng này trừ khi bắt buộc
     const doc = new Model(data)
     return session ? doc.save({ session }) : doc.save()
   },
 
-  /** ✏️ Update */
+  /** * ✅ OPTIMIZED: Update 
+   */
   async update<T extends Document>(Model: mongoose.Model<T>, id: string, data: UpdateQuery<T>, raw: boolean = false, session?: ClientSession) {
     try {
+      if (!mongoose.Types.ObjectId.isValid(id)) return null;
+
       const updateData = raw ? data : { $set: data }
-      return await Model.findByIdAndUpdate(new mongoose.Types.ObjectId(id), updateData, { new: true, session })
+
+      // Thêm { lean: true } vào options để trả về object thường sau khi update
+      return await Model.findByIdAndUpdate(
+        new mongoose.Types.ObjectId(id),
+        updateData,
+        { new: true, session, lean: true }
+      ).exec()
     } catch (error) {
       console.log(error)
       return null
     }
   },
 
-  /** Update flags for multiple IDs */
+  /** * Update flags 
+   */
   async updateFlagByIds<T extends Document>(Model: mongoose.Model<T>, ids: string | string[], flag: number): Promise<Common.IResponseArray> {
     const rs: Common.IResponseArray = { success: [], error: [], status: false }
 
@@ -157,25 +161,31 @@ export const CommonService = {
     const result = await Model.updateMany(
       { _id: { $in: objectIds } },
       { $set: { flag } }
-    )
+    ).exec()
 
     rs.success = idArray
     rs.status = result.modifiedCount > 0
     return rs
   },
 
-  /** Delete by ID list */
+  /** * ✅ OPTIMIZED: Delete by ID list 
+   */
   async deleteByIds<T extends Document>(Model: mongoose.Model<T>, ids: string | string[]): Promise<Common.IResponseArray> {
     const rs: Common.IResponseArray = { success: [], error: [], status: false }
 
     const idArray = Array.isArray(ids) ? ids : [ids]
     const objectIds = idArray.map(id => new mongoose.Types.ObjectId(id))
 
-    const existing = await Model.find({ _id: { $in: objectIds } }, { _id: 1 })
+    // Optimize: Chỉ select _id và dùng lean()
+    const existing = await Model.find({ _id: { $in: objectIds } })
+      .select('_id')
+      .lean()
+      .exec()
+
     const existingIds = new Set(existing.map((d: any) => d._id.toString()))
 
     if (existingIds.size > 0) {
-      await Model.deleteMany({ _id: { $in: Array.from(existingIds) } })
+      await Model.deleteMany({ _id: { $in: Array.from(existingIds) } }).exec()
     }
 
     rs.success = idArray.filter(id => existingIds.has(id))

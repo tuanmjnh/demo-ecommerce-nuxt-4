@@ -1,8 +1,8 @@
-import { Document, Schema, model } from 'mongoose'
+import mongoose from 'mongoose'
 import { TimeEventSchema, FileAttachSchema, MetaSchema, SeoDataSchema, PostStatsSchema, ChangeDataSchema, PostMediaSchema, enumStatus, enumPostType, enumPostFormat } from './common.model'
 
-export interface PostDocument extends Models.Post, Document { }
-const PostSchema = new Schema<PostDocument>({
+export interface PostDocument extends Models.Post, mongoose.Document { }
+const PostSchema = new mongoose.Schema<PostDocument>({
   /** Identification and grouping */
   key: { type: String, required: true },
   code: { type: String, required: true, unique: true, uppercase: true, index: true },
@@ -66,5 +66,26 @@ const PostSchema = new Schema<PostDocument>({
   updatedAt: { type: Number },
 }, { timestamps: { currentTime: () => Date.now() } })
 
-export const PostModel = model<PostDocument>('post', PostSchema)
-// PostSchema.index({ title: 'text', desc: 'text', content: 'text', tags: 'text' })
+// 1. Cho trang chủ/danh sách mặc định (Lọc theo flag + Sort mới nhất)
+// Query: { flag: 1 } -> Sort: { createdAt: -1 }
+PostSchema.index({ flag: 1, createdAt: -1 })
+
+// 2. Cho trang danh mục/nhóm (Lọc flag + groups + Sort mới nhất)
+// Query: { flag: 1, groups: { $in: [...] } } -> Sort: { createdAt: -1 }
+// Index cũ của bạn thiếu 'flag' ở đầu nên chưa tối ưu
+PostSchema.index({ flag: 1, groups: 1, createdAt: -1 })
+
+// 3. Cho việc lọc theo Key (VD: Lấy tin tức, thông báo...)
+// Query: { flag: 1, key: 'news' } -> Sort: { createdAt: -1 }
+PostSchema.index({ flag: 1, key: 1, createdAt: -1 })
+
+// 4. Cho việc lọc bài ghim (Pins)
+// Query: { flag: 1, pins: { $in: [...] } } -> Sort: { createdAt: -1 }
+PostSchema.index({ flag: 1, pins: 1, createdAt: -1 })
+
+// 5. Text Search (Optional - Nếu bạn dùng $text search sau này)
+// Lưu ý: Regex search { title: /.../ } KHÔNG dùng index này, nó dùng Scan Collection.
+// PostSchema.index({ title: 'text', desc: 'text' })
+
+// export const PostModel = model<PostDocument>('post', PostSchema)
+export const PostModel = mongoose.models.post || mongoose.model<PostDocument>('post', PostSchema)

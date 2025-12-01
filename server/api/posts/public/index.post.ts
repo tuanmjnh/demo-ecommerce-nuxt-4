@@ -4,6 +4,7 @@ export default defineEventHandler(async (event) => {
   const rs: Common.IResponseItems = { type: 'public-get', message: 'success', status: true, data: null }
   try {
     const body = await readBody(event)
+    console.log('Request Body:', JSON.stringify(body))
     const filter: any = { $and: [{ flag: body.flag !== undefined ? parseInt(String(body.flag)) : 1 }] }
     if (body.text) {
       filter.$and.push({
@@ -30,9 +31,14 @@ export default defineEventHandler(async (event) => {
       filter.$and.push({ pins: { $in: pins } })
     }
 
+    // rs.data = await CommonService.findAll(PostModel, filter, {
+    //   page: Number(body.page) || 1,
+    //   limit: Number(body.limit) || 20,
+    //   sort: body.sort ? body.sort : '-createdAt'
+    // })
     rs.data = await CommonService.findAll(PostModel, filter, {
-      page: Number(body.page) || 1,
-      limit: Number(body.limit) || 20,
+      page: Math.max(1, parseInt(String(body.page || 1))), // Đảm bảo luôn >= 1
+      limit: Math.max(1, parseInt(String(body.limit || 20))), // Đảm bảo limit hợp lệ
       sort: body.sort ? body.sort : '-createdAt'
     })
 
