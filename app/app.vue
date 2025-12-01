@@ -8,17 +8,31 @@ const companyState = useCompanyState()
 const color = computed(() => colorMode.value === 'dark' ? '#020618' : 'white')
 
 // --- 1. Fetch Data ---
-const { error: fetchError } = await useAsyncData('global-data', async () => {
+const { data: fetchedData, error: fetchError } = await useAsyncData('global-data', async () => {
   const [menuRes, companyRes] = await Promise.all([
     useAPI<Common.IResponseItem>('menu/public'),
     useAPI<Common.IResponseItem>('company/public')
   ])
 
-  if (menuRes?.data) menuState.flatItems.value = menuRes.data
-  if (companyRes?.data) companyState.info.value = companyRes.data
+  // if (menuRes?.data) menuState.flatItems.value = menuRes.data
+  // if (companyRes?.data) companyState.info.value = companyRes.data
   console.log(companyState.info.value)
-  return true
+  // Trả về dữ liệu thô, ĐỪNG gán state ở trong này
+  return {
+    menu: menuRes?.data || [],
+    company: companyRes?.data || {}
+  }
 })
+
+// --- Logic đồng bộ State (Chạy cả Server và Client) ---
+// Khi có fetchedData (từ Server gửi xuống hoặc Client fetch xong), ta mới gán vào State
+if (fetchedData.value) {
+  menuState.flatItems.value = fetchedData.value.menu
+  companyState.info.value = fetchedData.value.company
+
+  // Log kiểm tra
+  console.log('Company Data Loaded:', companyState.info.value)
+}
 
 if (fetchError.value) {
   console.error('Global Data Fetch Error:', fetchError.value)
