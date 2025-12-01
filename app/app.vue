@@ -16,7 +16,7 @@ const { data: fetchedData, error: fetchError } = await useAsyncData('global-data
 
   // if (menuRes?.data) menuState.flatItems.value = menuRes.data
   // if (companyRes?.data) companyState.info.value = companyRes.data
-  console.log(companyState.info.value)
+  // // console.log(companyState.info.value)
   // Trả về dữ liệu thô, ĐỪNG gán state ở trong này
   return {
     menu: menuRes?.data || [],
@@ -31,12 +31,12 @@ if (fetchedData.value) {
   companyState.info.value = fetchedData.value.company
 
   // Log kiểm tra
-  console.log('Company Data Loaded:', companyState.info.value)
+  // console.log('Company Data Loaded:', companyState.info.value)
 }
 
-if (fetchError.value) {
-  console.error('Global Data Fetch Error:', fetchError.value)
-}
+// if (fetchError.value) {
+//   console.error('Global Data Fetch Error:', fetchError.value)
+// }
 
 // --- 2. SEO Config ---
 useSeoMeta({
